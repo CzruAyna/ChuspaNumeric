@@ -2,7 +2,7 @@ name: CI JavaScript
 
 on:
   push:
-    branches: [main, dev]
+    branches: ['**']
   pull_request:
     branches: [main, dev]
 
@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         node-version: [18, 20, 22]
-      fail-fast: true
+      fail-fast: false
 
     steps:
       - name: Checkout code
@@ -29,25 +29,25 @@ jobs:
         run: |
           npm install --package-lock-only
           git diff --exit-code package-lock.json || (
-            echo "package-lock.json desincronizado, ejecuta npm install localmente y commitea el resultado"
+            echo "::error::package-lock.json desincronizado: el control de la base requiere correccion"
             exit 1
           )
 
       - name: Install dependencies
-        run: npm install
+        run: node scripts/validar-comando-ci.mjs npm install
 
       - name: Run ESLint
-        run: npm run lint
+        run: node scripts/validar-comando-ci.mjs npm run lint
 
       - name: Check code formatting
-        run: npm run format:check
+        run: node scripts/validar-comando-ci.mjs npm run format:check
 
       - name: Check circular dependencies
-        run: npm run check:circular
+        run: node scripts/validar-comando-ci.mjs npm run check:circular
 
       - name: Run tests
-        run: npm test
-            
+        run: node scripts/validar-comando-ci.mjs npm test
+
       - name: Verificar regresión numérica
         uses: ./.github/actions/verificar-regresion-numerica
 
@@ -110,3 +110,20 @@ jobs:
 
           deno run --allow-read deno-compat-check.mjs
           rm deno-compat-check.mjs
+
+  regresion-1314:
+    name: Issue 1314 en Node ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Instalar las dependencias reales
+        run: node scripts/validar-comando-ci.mjs npm install
+      - name: Ejecutar los 36 casos de la issue
+        run: node scripts/validar-comando-ci.mjs node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --runTestsByPath tests/validacion_regresion_1314.test.js --coverage=false
