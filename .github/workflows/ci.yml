@@ -26,28 +26,28 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install locked dependencies
-        run: npm ci
+        run: node scripts/validar-comando-ci.mjs npm ci
 
       - name: Verify package-lock.json is unchanged
         run: git diff --exit-code -- package-lock.json
 
       - name: Run ESLint
-        run: npm run lint
+        run: node scripts/validar-comando-ci.mjs npm run lint
 
       - name: Check code formatting
-        run: npm run format:check
+        run: node scripts/validar-comando-ci.mjs npm run format:check
 
       - name: Check circular dependencies
-        run: npm run check:circular
+        run: node scripts/validar-comando-ci.mjs npm run check:circular
 
       - name: Run tests
-        run: npm test
+        run: node scripts/validar-comando-ci.mjs npm test
 
       - name: Build distribution
-        run: npm run build
+        run: node scripts/validar-comando-ci.mjs npm run build
 
       - name: Verify installed package
-        run: npm run test:package
+        run: node scripts/validar-comando-ci.mjs npm run test:package
 
       - name: Verificar regresión numérica
         uses: ./.github/actions/verificar-regresion-numerica

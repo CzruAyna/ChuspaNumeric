@@ -52,7 +52,10 @@ test('los módulos de src no tienen efectos secundarios evidentes a nivel de mó
         const llamada = expresion.callee;
         const nombre = llamada.type === 'Identifier' ? llamada.name : null;
         const objeto = llamada.type === 'MemberExpression' ? llamada.object.name : null;
-        if (['setTimeout', 'setInterval'].includes(nombre) || ['console', 'process'].includes(objeto)) {
+        if (
+          ['setTimeout', 'setInterval'].includes(nombre) ||
+          ['console', 'process'].includes(objeto)
+        ) {
           sospechosos.push(archivo);
         }
       }

@@ -31,7 +31,7 @@ env/
 
 # Distribución / build
 dist/
-build/
+/build/
 *.egg-info/
 
 # Build general / binarios
