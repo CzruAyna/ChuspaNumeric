@@ -40,48 +40,48 @@ describe('Pruebas de integración cruzada', () => {
       const resultados = [];
 
       // Bisección: { f, a, b, tolerancia, maxIter }
-      try {
+      {
         const res = biseccion({ f, a: 1, b: 2, tolerancia });
-        if (res && res.resultado !== undefined) {
-          resultados.push({ metodo: 'biseccion', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        resultados.push({ metodo: 'biseccion', valor: res.resultado });
+      }
 
       // Falsa posición: { f, a, b, tolerancia, maxIter }
-      try {
+      {
         const res = falsaPosicion({ f, a: 1, b: 2, tolerancia });
-        if (res && res.resultado !== undefined) {
-          resultados.push({ metodo: 'falsaPosicion', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        resultados.push({ metodo: 'falsaPosicion', valor: res.resultado });
+      }
 
       // Newton-Raphson: { f, df, x0, tolerancia, maxIter }
-      try {
+      {
         const df = (x) => 2 * x;
         const res = newtonRaphson({ f, df, x0: 1.5, tolerancia });
-        if (res && res.resultado !== undefined) {
-          resultados.push({ metodo: 'newtonRaphson', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        resultados.push({ metodo: 'newtonRaphson', valor: res.resultado });
+      }
 
       // Secante: { f, x0, x1, tolerancia, maxIter }
-      try {
+      {
         const res = secante({ f, x0: 1, x1: 2, tolerancia });
-        if (res && res.resultado !== undefined) {
-          resultados.push({ metodo: 'secante', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        resultados.push({ metodo: 'secante', valor: res.resultado });
+      }
 
       // Punto fijo: { g, x0, tolerancia, maxIter }
-      try {
+      {
         const g = (x) => (x * x + 2) / (2 * x);
         const res = puntoFijo({ g, x0: 1.5, tolerancia });
-        if (res && res.resultado !== undefined) {
-          resultados.push({ metodo: 'puntoFijo', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
 
-      expect(resultados.length).toBeGreaterThanOrEqual(3);
+        resultados.push({ metodo: 'puntoFijo', valor: res.resultado });
+      }
+
+      expect(resultados).toHaveLength(5);
 
       resultados.forEach((result) => {
         expect(Math.abs(result.valor - esperado)).toBeLessThan(tolerancia);
@@ -111,51 +111,46 @@ describe('Pruebas de integración cruzada', () => {
       const resultados = [];
 
       // Gauss: { A, b }
-      try {
+      {
         const res = gauss({ A, b });
-        if (res && res.resultado !== undefined && Array.isArray(res.resultado)) {
-          resultados.push({ metodo: 'gauss', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        resultados.push({ metodo: 'gauss', valor: res.resultado });
+      }
 
       // Gauss-Jordan: { A, b }
-      try {
+      {
         const res = gaussJordan({ A, b });
-        if (res && res.resultado !== undefined && Array.isArray(res.resultado)) {
-          resultados.push({ metodo: 'gaussJordan', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        resultados.push({ metodo: 'gaussJordan', valor: res.resultado });
+      }
 
       // LU: { A, b } → devuelve resultado.x
-      try {
+      {
         const res = lu({ A, b });
-        if (
-          res &&
-          res.resultado &&
-          res.resultado.x !== undefined &&
-          Array.isArray(res.resultado.x)
-        ) {
-          resultados.push({ metodo: 'lu', valor: res.resultado.x });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        resultados.push({ metodo: 'lu', valor: res.resultado.x });
+      }
 
       // Jacobi: { A, b, tolerancia, maxIter }
-      try {
+      {
         const res = jacobi({ A, b, tolerancia: 1e-6, maxIter: 100 });
-        if (res && res.resultado !== undefined && Array.isArray(res.resultado)) {
-          resultados.push({ metodo: 'jacobi', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        resultados.push({ metodo: 'jacobi', valor: res.resultado });
+      }
 
       // Gauss-Seidel: { A, b, tolerancia, maxIter }
-      try {
+      {
         const res = gaussSeidel({ A, b, tolerancia: 1e-6, maxIter: 100 });
-        if (res && res.resultado !== undefined && Array.isArray(res.resultado)) {
-          resultados.push({ metodo: 'gaussSeidel', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
 
-      expect(resultados.length).toBeGreaterThanOrEqual(3);
+        resultados.push({ metodo: 'gaussSeidel', valor: res.resultado });
+      }
+
+      expect(resultados).toHaveLength(5);
 
       resultados.forEach((result) => {
         expect(result.valor.length).toBe(3);
@@ -183,20 +178,23 @@ describe('Pruebas de integración cruzada', () => {
       let valorNewton = null;
 
       // Lagrange: { puntos, x } → devuelve objeto con resultado
-      try {
+      {
         const res = lagrange({ puntos, x });
-        if (res && res.resultado !== undefined) {
-          valorLagrange = res.resultado;
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        valorLagrange = res.resultado;
+      }
 
       // NewtonDD: { puntos, x } → devuelve objeto con resultado
-      try {
+      {
         const res = newtonDD({ puntos, x });
-        if (res && res.resultado !== undefined) {
-          valorNewton = res.resultado;
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        valorNewton = res.resultado;
+      }
+
+      expect(valorLagrange).toBeCloseTo(esperado, 10);
+      expect(valorNewton).toBeCloseTo(esperado, 10);
 
       // Si ambos funcionan, deben dar el mismo valor
       if (valorLagrange !== null && valorNewton !== null) {
@@ -231,30 +229,30 @@ describe('Pruebas de integración cruzada', () => {
       const resultados = [];
 
       // Trapecio: { f, a, b, n }
-      try {
+      {
         const res = trapecio({ f, a, b, n: 100 });
-        if (res && res.resultado !== undefined) {
-          resultados.push({ metodo: 'trapecio', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        resultados.push({ metodo: 'trapecio', valor: res.resultado });
+      }
 
       // Simpson 13: { f, a, b, n }
-      try {
+      {
         const res = simpson13({ f, a, b, n: 100 });
-        if (res && res.resultado !== undefined) {
-          resultados.push({ metodo: 'simpson13', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        resultados.push({ metodo: 'simpson13', valor: res.resultado });
+      }
 
       // Simpson 38: { f, a, b, n }
-      try {
+      {
         const res = simpson38({ f, a, b, n: 99 });
-        if (res && res.resultado !== undefined) {
-          resultados.push({ metodo: 'simpson38', valor: res.resultado });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
 
-      expect(resultados.length).toBeGreaterThanOrEqual(2);
+        resultados.push({ metodo: 'simpson38', valor: res.resultado });
+      }
+
+      expect(resultados).toHaveLength(3);
 
       resultados.forEach((result) => {
         expect(Math.abs(result.valor - esperado)).toBeLessThan(tolerancia);
@@ -278,33 +276,33 @@ describe('Pruebas de integración cruzada', () => {
       const resultados = [];
 
       // Euler: { f, x0, y0, h, xFinal }
-      try {
+      {
         const res = euler({ f, x0, y0, h, xFinal });
-        if (res && res.resultado && res.resultado.length > 0) {
-          const ultimo = res.resultado[res.resultado.length - 1];
-          resultados.push({ metodo: 'euler', valor: ultimo[1] });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        const ultimo = res.resultado[res.resultado.length - 1];
+        resultados.push({ metodo: 'euler', valor: ultimo[1] });
+      }
 
       // Euler Mejorado: { f, x0, y0, h, xFinal }
-      try {
+      {
         const res = eulerMejorado({ f, x0, y0, h, xFinal });
-        if (res && res.resultado && res.resultado.length > 0) {
-          const ultimo = res.resultado[res.resultado.length - 1];
-          resultados.push({ metodo: 'eulerMejorado', valor: ultimo[1] });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
+
+        const ultimo = res.resultado[res.resultado.length - 1];
+        resultados.push({ metodo: 'eulerMejorado', valor: ultimo[1] });
+      }
 
       // Runge-Kutta 4: { f, x0, y0, h, xFinal }
-      try {
+      {
         const res = rungeKutta4({ f, x0, y0, h, xFinal });
-        if (res && res.resultado && res.resultado.length > 0) {
-          const ultimo = res.resultado[res.resultado.length - 1];
-          resultados.push({ metodo: 'rungeKutta4', valor: ultimo[1] });
-        }
-      } catch (e) {}
+        expect(res).toHaveProperty('resultado');
 
-      expect(resultados.length).toBeGreaterThanOrEqual(2);
+        const ultimo = res.resultado[res.resultado.length - 1];
+        resultados.push({ metodo: 'rungeKutta4', valor: ultimo[1] });
+      }
+
+      expect(resultados).toHaveLength(3);
 
       resultados.forEach((result) => {
         expect(Math.abs(result.valor - esperado)).toBeLessThan(tolerancia);

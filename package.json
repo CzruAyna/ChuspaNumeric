@@ -2,36 +2,38 @@
   "name": "chuspanumeric",
   "version": "1.0.0",
   "description": "Numerical methods library for mathematics and engineering applications",
-  "main": "dist/chuspanumeric.cjs.js",
+  "main": "dist/chuspanumeric.cjs",
   "module": "dist/chuspanumeric.esm.js",
   "type": "module",
   "sideEffects": false,
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "src"
   ],
   "bin": {
-    "chuspanumeric": "./src/cli/chuspanumeric-cli.js"
+    "chuspanumeric": "./src/cli/trazo-cli.js"
   },
   "exports": {
     ".": {
-      "require": "./dist/chuspanumeric.cjs.js",
+      "require": "./dist/chuspanumeric.cjs",
       "import": "./dist/chuspanumeric.esm.js"
     }
   },
   "scripts": {
     "start": "node src/index.js",
     "build": "rollup -c",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=\"{\\\"testMatch\\\":[\\\"**/*.test.js\\\"],\\\"passWithNoTests\\\":true}\"",
-    "test:watch": "jest --watch tests",
-    "test:cov": "jest --coverage",
-    "lint": "eslint src tests",
-    "format": "prettier --write src/**/*.js tests/**/*.js",
-    "format:check": "prettier --check src tests",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
+    "test:watch": "npm test -- --watch",
+    "test:cov": "npm test -- --coverage",
+    "lint": "eslint src tests scripts --max-warnings=0",
+    "format": "prettier --write src tests scripts",
+    "format:check": "prettier --check src tests scripts",
     "typecheck": "tsc -p jsconfig.json --noEmit",
     "check:circular": "madge --circular --extensions js src/",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:package": "node scripts/verificar-paquete.mjs"
   },
   "keywords": [
     "numerical-methods",
@@ -49,16 +51,18 @@
   "author": "sis-inf",
   "license": "MIT",
   "engines": {
-    "node": ">=16"
+    "node": ">=18.18.0"
   },
   "devDependencies": {
-    "eslint": "^10.14.0",
+    "eslint": "9.39.4",
     "husky": "^9.1.7",
     "jest": "^30.5.2",
-    "lint-staged": "^17.6.0",
+    "lint-staged": "15.5.2",
     "madge": "^8.0.0",
     "prettier": "^3.9.10",
-    "rollup": "^4.67.2"
+    "rollup": "^4.67.2",
+    "@eslint/js": "9.39.4",
+    "globals": "16.5.0"
   },
   "dependencies": {
     "mathjs": "^15.2.0"

@@ -31,7 +31,7 @@ import { media, desviacionEstandar } from '../utils/estadistica.js';
  * console.log(resultado.valor); // ≈ 0.333
  * console.log(resultado.errorEstandar); // Error estándar estimado
  */
-export function integracionMonteCarlo(f, a, b, n = 10000) {
+function integracionMonteCarloUnidimensional(f, a, b, n = 10000) {
   // Validaciones
   if (typeof f !== 'function') {
     throw new Error('El primer argumento debe ser una función');
@@ -77,7 +77,7 @@ export function integracionMonteCarlo(f, a, b, n = 10000) {
     errorEstandar: errorEstandarIntegral,
     n: n,
     intervaloA: a,
-    intervaloB: b
+    intervaloB: b,
   };
 }
 /**
@@ -206,7 +206,7 @@ function crearPRNG(semilla) {
  * });
  * console.log(r3.resultado); // ≈ 1.5
  */
-export function integracionMonteCarlo({
+function integracionMonteCarloMultidimensional({
   f,
   limitesInferiores,
   limitesSuperiores,
@@ -214,62 +214,11 @@ export function integracionMonteCarlo({
   semilla = null,
 }) {
   // --- Validación ---
-  if (typeof f !== 'function') {
-    throw new ErrorParametros(
-      'ChuspaNumeric.integracionMonteCarlo: "f" debe ser una función que recibe un array de coordenadas.'
-    );
-  }
-
-  if (!Array.isArray(limitesInferiores) || limitesInferiores.length === 0) {
-    throw new ErrorParametros(
-      'ChuspaNumeric.integracionMonteCarlo: "limitesInferiores" debe ser un array no vacío.'
-    );
-  }
-
-  if (!Array.isArray(limitesSuperiores) || limitesSuperiores.length === 0) {
-    throw new ErrorParametros(
-      'ChuspaNumeric.integracionMonteCarlo: "limitesSuperiores" debe ser un array no vacío.'
-    );
-  }
-
+  validarDominioMonteCarlo(f, limitesInferiores, limitesSuperiores, nMuestras);
   const d = limitesInferiores.length;
 
-  if (limitesSuperiores.length !== d) {
-    throw new ErrorParametros(
-      `ChuspaNumeric.integracionMonteCarlo: "limitesInferiores" (longitud ${d}) y ` +
-      `"limitesSuperiores" (longitud ${limitesSuperiores.length}) deben tener la misma longitud.`
-    );
-  }
-
-  for (let i = 0; i < d; i++) {
-    if (typeof limitesInferiores[i] !== 'number' || !isFinite(limitesInferiores[i])) {
-      throw new ErrorParametros(
-        `ChuspaNumeric.integracionMonteCarlo: limitesInferiores[${i}] = ${limitesInferiores[i]} no es un número finito.`
-      );
-    }
-    if (typeof limitesSuperiores[i] !== 'number' || !isFinite(limitesSuperiores[i])) {
-      throw new ErrorParametros(
-        `ChuspaNumeric.integracionMonteCarlo: limitesSuperiores[${i}] = ${limitesSuperiores[i]} no es un número finito.`
-      );
-    }
-    if (limitesSuperiores[i] <= limitesInferiores[i]) {
-      throw new ErrorParametros(
-        `ChuspaNumeric.integracionMonteCarlo: limitesSuperiores[${i}] (${limitesSuperiores[i]}) ` +
-        `debe ser mayor que limitesInferiores[${i}] (${limitesInferiores[i]}).`
-      );
-    }
-  }
-
-  if (!Number.isInteger(nMuestras) || nMuestras < 1) {
-    throw new ErrorParametros(
-      `ChuspaNumeric.integracionMonteCarlo: "nMuestras" debe ser un entero positivo. Se recibió: ${nMuestras}.`
-    );
-  }
-
   // --- Configurar PRNG ---
-  const aleatorio = semilla !== null
-    ? crearPRNG(semilla)
-    : () => Math.random();
+  const aleatorio = semilla !== null ? crearPRNG(semilla) : () => Math.random();
 
   // Longitudes de cada dimensión: bᵢ - aᵢ
   const longitudes = limitesSuperiores.map((b, i) => b - limitesInferiores[i]);
@@ -326,4 +275,64 @@ export function integracionMonteCarlo({
       tiempo_ms: 0,
     },
   });
+}
+export function integracionMonteCarlo(parametros, a, b, n) {
+  if (typeof parametros === 'function') {
+    return integracionMonteCarloUnidimensional(parametros, a, b, n);
+  }
+  return integracionMonteCarloMultidimensional(parametros);
+}
+
+function validarDominioMonteCarlo(f, limitesInferiores, limitesSuperiores, nMuestras) {
+  if (typeof f !== 'function') {
+    throw new ErrorParametros(
+      'ChuspaNumeric.integracionMonteCarlo: "f" debe ser una función que recibe un array de coordenadas.',
+    );
+  }
+
+  if (!Array.isArray(limitesInferiores) || limitesInferiores.length === 0) {
+    throw new ErrorParametros(
+      'ChuspaNumeric.integracionMonteCarlo: "limitesInferiores" debe ser un array no vacío.',
+    );
+  }
+
+  if (!Array.isArray(limitesSuperiores) || limitesSuperiores.length === 0) {
+    throw new ErrorParametros(
+      'ChuspaNumeric.integracionMonteCarlo: "limitesSuperiores" debe ser un array no vacío.',
+    );
+  }
+
+  const d = limitesInferiores.length;
+
+  if (limitesSuperiores.length !== d) {
+    throw new ErrorParametros(
+      `ChuspaNumeric.integracionMonteCarlo: "limitesInferiores" (longitud ${d}) y ` +
+        `"limitesSuperiores" (longitud ${limitesSuperiores.length}) deben tener la misma longitud.`,
+    );
+  }
+
+  for (let i = 0; i < d; i++) {
+    if (typeof limitesInferiores[i] !== 'number' || !isFinite(limitesInferiores[i])) {
+      throw new ErrorParametros(
+        `ChuspaNumeric.integracionMonteCarlo: limitesInferiores[${i}] = ${limitesInferiores[i]} no es un número finito.`,
+      );
+    }
+    if (typeof limitesSuperiores[i] !== 'number' || !isFinite(limitesSuperiores[i])) {
+      throw new ErrorParametros(
+        `ChuspaNumeric.integracionMonteCarlo: limitesSuperiores[${i}] = ${limitesSuperiores[i]} no es un número finito.`,
+      );
+    }
+    if (limitesSuperiores[i] <= limitesInferiores[i]) {
+      throw new ErrorParametros(
+        `ChuspaNumeric.integracionMonteCarlo: limitesSuperiores[${i}] (${limitesSuperiores[i]}) ` +
+          `debe ser mayor que limitesInferiores[${i}] (${limitesInferiores[i]}).`,
+      );
+    }
+  }
+
+  if (!Number.isInteger(nMuestras) || nMuestras < 1) {
+    throw new ErrorParametros(
+      `ChuspaNumeric.integracionMonteCarlo: "nMuestras" debe ser un entero positivo. Se recibió: ${nMuestras}.`,
+    );
+  }
 }

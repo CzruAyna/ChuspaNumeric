@@ -60,29 +60,109 @@ const puntosInterp = [
 
 const casos = [
   { categoria: 'Sistemas lineales', nombre: 'gauss', fn: () => gauss({ A: A3, b: b3 }) },
-  { categoria: 'Sistemas lineales', nombre: 'gaussJordan', fn: () => gaussJordan({ A: A3, b: b3 }) },
-  { categoria: 'Sistemas lineales', nombre: 'jacobi', fn: () => jacobi({ A: Adiag, b: bdiag, tolerancia: 1e-6, maxIter: 100 }) },
-  { categoria: 'Sistemas lineales', nombre: 'gaussSeidel', fn: () => gaussSeidel({ A: Adiag, b: bdiag, tolerancia: 1e-6, maxIter: 100 }) },
+  {
+    categoria: 'Sistemas lineales',
+    nombre: 'gaussJordan',
+    fn: () => gaussJordan({ A: A3, b: b3 }),
+  },
+  {
+    categoria: 'Sistemas lineales',
+    nombre: 'jacobi',
+    fn: () => jacobi({ A: Adiag, b: bdiag, tolerancia: 1e-6, maxIter: 100 }),
+  },
+  {
+    categoria: 'Sistemas lineales',
+    nombre: 'gaussSeidel',
+    fn: () => gaussSeidel({ A: Adiag, b: bdiag, tolerancia: 1e-6, maxIter: 100 }),
+  },
   { categoria: 'Sistemas lineales', nombre: 'lu', fn: () => lu({ A: A3, b: b3 }) },
 
-  { categoria: 'Ecuaciones no lineales', nombre: 'biseccion', fn: () => biseccion({ f: (x) => x * x - 4, a: 0, b: 3, tolerancia: 1e-6, maxIter: 100 }) },
-  { categoria: 'Ecuaciones no lineales', nombre: 'falsaPosicion', fn: () => falsaPosicion({ f: (x) => x * x - 4, a: 0, b: 3, tolerancia: 1e-6, maxIter: 100 }) },
-  { categoria: 'Ecuaciones no lineales', nombre: 'newtonRaphson', fn: () => newtonRaphson({ f: (x) => x * x - 4, df: (x) => 2 * x, x0: 3, tolerancia: 1e-6, maxIter: 100 }) },
-  { categoria: 'Ecuaciones no lineales', nombre: 'secante', fn: () => secante({ f: (x) => x * x - 4, x0: 0, x1: 3, tolerancia: 1e-6, maxIter: 100 }) },
-  { categoria: 'Ecuaciones no lineales', nombre: 'puntoFijo', fn: () => puntoFijo({ g: (x) => (x + 4 / x) / 2, x0: 3, tolerancia: 1e-6, maxIter: 100 }) },
-  { categoria: 'Ecuaciones no lineales', nombre: 'muller', fn: () => muller({ f: (x) => x * x - 4, x0: 0, x1: 1.5, x2: 3, tolerancia: 1e-6, maxIter: 100 }) },
+  {
+    categoria: 'Ecuaciones no lineales',
+    nombre: 'biseccion',
+    fn: () => biseccion({ f: (x) => x * x - 4, a: 0, b: 3, tolerancia: 1e-6, maxIter: 100 }),
+  },
+  {
+    categoria: 'Ecuaciones no lineales',
+    nombre: 'falsaPosicion',
+    fn: () => falsaPosicion({ f: (x) => x * x - 4, a: 0, b: 3, tolerancia: 1e-6, maxIter: 100 }),
+  },
+  {
+    categoria: 'Ecuaciones no lineales',
+    nombre: 'newtonRaphson',
+    fn: () =>
+      newtonRaphson({
+        f: (x) => x * x - 4,
+        df: (x) => 2 * x,
+        x0: 3,
+        tolerancia: 1e-6,
+        maxIter: 100,
+      }),
+  },
+  {
+    categoria: 'Ecuaciones no lineales',
+    nombre: 'secante',
+    fn: () => secante({ f: (x) => x * x - 4, x0: 0, x1: 3, tolerancia: 1e-6, maxIter: 100 }),
+  },
+  {
+    categoria: 'Ecuaciones no lineales',
+    nombre: 'puntoFijo',
+    fn: () => puntoFijo({ g: (x) => (x + 4 / x) / 2, x0: 3, tolerancia: 1e-6, maxIter: 100 }),
+  },
+  {
+    categoria: 'Ecuaciones no lineales',
+    nombre: 'muller',
+    fn: () =>
+      muller({ f: (x) => x * x - 4, x0: 0, x1: 1.5, x2: 3, tolerancia: 1e-6, maxIter: 100 }),
+  },
 
-  { categoria: 'Interpolación', nombre: 'lagrange', fn: () => lagrange({ puntos: puntosInterp, x: 1.5 }) },
-  { categoria: 'Interpolación', nombre: 'newtonDD', fn: () => newtonDD({ puntos: puntosInterp, x: 1.5 }) },
-  { categoria: 'Interpolación', nombre: 'splines', fn: () => splines({ puntos: puntosInterp, x: 1.5 }) },
+  {
+    categoria: 'Interpolación',
+    nombre: 'lagrange',
+    fn: () => lagrange({ puntos: puntosInterp, x: 1.5 }),
+  },
+  {
+    categoria: 'Interpolación',
+    nombre: 'newtonDD',
+    fn: () => newtonDD({ puntos: puntosInterp, x: 1.5 }),
+  },
+  {
+    categoria: 'Interpolación',
+    nombre: 'splines',
+    fn: () => splines({ puntos: puntosInterp, x: 1.5 }),
+  },
 
-  { categoria: 'Integración numérica', nombre: 'trapecio', fn: () => trapecio({ f: (x) => x * x, a: 0, b: 1, n: 100 }) },
-  { categoria: 'Integración numérica', nombre: 'simpson13', fn: () => simpson13({ f: (x) => x * x, a: 0, b: 1, n: 100 }) },
-  { categoria: 'Integración numérica', nombre: 'simpson38', fn: () => simpson38({ f: (x) => x * x, a: 0, b: 1, n: 99 }) },
+  {
+    categoria: 'Integración numérica',
+    nombre: 'trapecio',
+    fn: () => trapecio({ f: (x) => x * x, a: 0, b: 1, n: 100 }),
+  },
+  {
+    categoria: 'Integración numérica',
+    nombre: 'simpson13',
+    fn: () => simpson13({ f: (x) => x * x, a: 0, b: 1, n: 100 }),
+  },
+  {
+    categoria: 'Integración numérica',
+    nombre: 'simpson38',
+    fn: () => simpson38({ f: (x) => x * x, a: 0, b: 1, n: 99 }),
+  },
 
-  { categoria: 'EDO', nombre: 'euler', fn: () => euler({ f: (x, y) => y, x0: 0, y0: 1, h: 0.01, xFinal: 1 }) },
-  { categoria: 'EDO', nombre: 'eulerMejorado', fn: () => eulerMejorado({ f: (x, y) => y, x0: 0, y0: 1, h: 0.01, xFinal: 1 }) },
-  { categoria: 'EDO', nombre: 'rungeKutta4', fn: () => rungeKutta4({ f: (x, y) => y, x0: 0, y0: 1, h: 0.01, xFinal: 1 }) },
+  {
+    categoria: 'EDO',
+    nombre: 'euler',
+    fn: () => euler({ f: (x, y) => y, x0: 0, y0: 1, h: 0.01, xFinal: 1 }),
+  },
+  {
+    categoria: 'EDO',
+    nombre: 'eulerMejorado',
+    fn: () => eulerMejorado({ f: (x, y) => y, x0: 0, y0: 1, h: 0.01, xFinal: 1 }),
+  },
+  {
+    categoria: 'EDO',
+    nombre: 'rungeKutta4',
+    fn: () => rungeKutta4({ f: (x, y) => y, x0: 0, y0: 1, h: 0.01, xFinal: 1 }),
+  },
 ];
 
 console.log('# Resultados de benchmark (Node', process.version, ')');
@@ -92,7 +172,7 @@ console.log('');
 const resultados = [];
 
 for (const caso of casos) {
-  let tiempos = [];
+  const tiempos = [];
   let error = null;
 
   try {
@@ -117,7 +197,7 @@ for (const caso of casos) {
   const iteracionesPorSegundo = promedio > 0 ? 1000 / promedio : Infinity;
 
   console.log(
-    `${caso.categoria},${caso.nombre},${promedio.toFixed(4)},${iteracionesPorSegundo.toFixed(0)},${REPETICIONES},`
+    `${caso.categoria},${caso.nombre},${promedio.toFixed(4)},${iteracionesPorSegundo.toFixed(0)},${REPETICIONES},`,
   );
 
   resultados.push({ ...caso, promedio, iteracionesPorSegundo });
@@ -125,4 +205,12 @@ for (const caso of casos) {
 
 console.log('');
 console.log('# JSON');
-console.log(JSON.stringify(resultados.map(({ fn, ...rest }) => rest), null, 2));
+console.log(
+  JSON.stringify(
+    resultados.map((resultado) =>
+      Object.fromEntries(Object.entries(resultado).filter(([clave]) => clave !== 'fn')),
+    ),
+    null,
+    2,
+  ),
+);

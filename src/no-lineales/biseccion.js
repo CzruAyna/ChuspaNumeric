@@ -1,11 +1,11 @@
-import { crearResultado } from "../core/contrato.js";
-import { ErrorParametros, ErrorTimeout } from "../core/errores.js";
+import { crearResultado } from '../core/contrato.js';
+import { ErrorParametros, ErrorTimeout } from '../core/errores.js';
 import {
   validarFuncion,
   validarIntervalo,
   validarTolerancia,
   validarIteraciones,
-} from "../utils/validaciones.js";
+} from '../utils/validaciones.js';
 
 /**
  * Encuentra una raíz de f(x) = 0 en [a, b] usando el Método de Bisección.
@@ -47,24 +47,18 @@ import {
  * @throws {ErrorTimeout} Si se excede el tiempo máximo de ejecución configurado.
  */
 function biseccion({ f, a, b, tolerancia = 1e-6, maxIter = 100, timeoutMs = null }) {
-  validarFuncion(f, "f");
+  validarFuncion(f, 'f');
   validarIntervalo(a, b);
   validarTolerancia(tolerancia);
   validarIteraciones(maxIter);
 
-  if (timeoutMs !== null) {
-    if (typeof timeoutMs !== "number" || !isFinite(timeoutMs) || timeoutMs <= 0) {
-      throw new ErrorParametros(
-        `ChuspaNumeric.biseccion: 'timeoutMs' debe ser un número finito mayor a cero o null. Se recibió: ${timeoutMs}.`
-      );
-    }
-  }
+  validarTimeout(timeoutMs);
 
   if (f(a) * f(b) >= 0) {
     throw new ErrorParametros(
       `ChuspaNumeric.biseccion: f(a) · f(b) >= 0. ` +
-      `f(${a}) = ${f(a)}, f(${b}) = ${f(b)}. ` +
-      `El intervalo [a, b] debe contener un cambio de signo.`
+        `f(${a}) = ${f(a)}, f(${b}) = ${f(b)}. ` +
+        `El intervalo [a, b] debe contener un cambio de signo.`,
     );
   }
 
@@ -81,7 +75,7 @@ function biseccion({ f, a, b, tolerancia = 1e-6, maxIter = 100, timeoutMs = null
     if (timeoutMs !== null && n % INTERVALO_VERIFICACION === 0) {
       if (performance.now() - inicio > timeoutMs) {
         throw new ErrorTimeout(
-          `ChuspaNumeric.biseccion: excedió el timeout de ${timeoutMs}ms después de ${n} iteraciones.`
+          `ChuspaNumeric.biseccion: excedió el timeout de ${timeoutMs}ms después de ${n} iteraciones.`,
         );
       }
     }
@@ -115,7 +109,7 @@ function biseccion({ f, a, b, tolerancia = 1e-6, maxIter = 100, timeoutMs = null
       ? `Convergió en ${iteraciones.length} iteraciones.`
       : `Se alcanzó el máximo de ${maxIter} iteraciones sin converger.`,
     meta: {
-      metodo: "biseccion",
+      metodo: 'biseccion',
       parametros: { a, b, tolerancia, maxIter, timeoutMs },
       tiempo_ms: 0,
     },
@@ -123,3 +117,12 @@ function biseccion({ f, a, b, tolerancia = 1e-6, maxIter = 100, timeoutMs = null
 }
 
 export { biseccion };
+function validarTimeout(timeoutMs) {
+  if (timeoutMs !== null) {
+    if (typeof timeoutMs !== 'number' || !isFinite(timeoutMs) || timeoutMs <= 0) {
+      throw new ErrorParametros(
+        `ChuspaNumeric.biseccion: 'timeoutMs' debe ser un número finito mayor a cero o null. Se recibió: ${timeoutMs}.`,
+      );
+    }
+  }
+}

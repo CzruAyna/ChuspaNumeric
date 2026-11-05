@@ -4,11 +4,9 @@ export default {
   transform: {},
 
   collectCoverage: true,
+  coverageProvider: 'v8',
   coverageDirectory: 'coverage/',
-  collectCoverageFrom: [
-    'src/**/*.js',
-    '!src/index.js',
-  ],
+  collectCoverageFrom: ['src/**/*.js', '!src/index.js'],
   coverageThreshold: {
     global: {
       branches: 70,

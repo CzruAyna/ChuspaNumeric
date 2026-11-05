@@ -1,11 +1,11 @@
-import { crearResultado } from "../core/contrato.js";
-import { ErrorDominio } from "../core/errores.js";
+import { crearResultado } from '../core/contrato.js';
+import { ErrorDominio } from '../core/errores.js';
 import {
   validarMatrizCuadrada,
   validarVector,
   validarTolerancia,
   validarIteraciones,
-} from "../utils/validaciones.js";
+} from '../utils/validaciones.js';
 
 /**
  * Resuelve un sistema lineal A·x = b mediante el método iterativo de Gauss-Seidel.
@@ -23,13 +23,7 @@ import {
  * @returns {Object} Resultado siguiendo el contrato de ChuspaNumeric.
  * @throws {ErrorDominio} Si algún elemento de la diagonal de A es cero.
  */
-function gaussSeidel({
-  A,
-  b,
-  x0,
-  tolerancia = 1e-6,
-  maxIter = 100,
-}) {
+function gaussSeidel({ A, b, x0, tolerancia = 1e-6, maxIter = 100 }) {
   validarMatrizCuadrada(A);
 
   const n = A.length;
@@ -46,12 +40,12 @@ function gaussSeidel({
     if (A[i][i] === 0) {
       throw new ErrorDominio(
         `ChuspaNumeric.gaussSeidel: el elemento diagonal A[${i}][${i}] es cero. ` +
-        `Considera reordenar las filas para que la diagonal sea no nula.`
+          `Considera reordenar las filas para que la diagonal sea no nula.`,
       );
     }
   }
 
-  let x = [...xInicial];
+  const x = [...xInicial];
   const iteraciones = [];
   let convergio = false;
 
@@ -73,9 +67,7 @@ function gaussSeidel({
       x[i] = (b[i] - sumaActualizada - sumaAnterior) / A[i][i];
     }
 
-    const error = Math.sqrt(
-      x.reduce((acum, val, i) => acum + (val - xAnterior[i]) ** 2, 0)
-    );
+    const error = Math.sqrt(x.reduce((acum, val, i) => acum + (val - xAnterior[i]) ** 2, 0));
 
     iteraciones.push({
       n: iter + 1,
@@ -97,7 +89,7 @@ function gaussSeidel({
       ? `Convergió en ${iteraciones.length} iteraciones.`
       : `Se alcanzó el máximo de ${maxIter} iteraciones sin converger.`,
     meta: {
-      metodo: "gauss-seidel",
+      metodo: 'gauss-seidel',
       parametros: {
         A,
         b,

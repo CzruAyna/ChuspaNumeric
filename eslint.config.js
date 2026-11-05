@@ -4,13 +4,13 @@ import globals from 'globals';
 export default [
   js.configs.recommended,
   {
-    files: ['src/**/*.js', 'tests/**/*.js'],
+    files: ['src/**/*.js', 'tests/**/*.js', 'scripts/**/*.mjs', 'scripts/**/*.js'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
       globals: {
-        ...globals.node
-      }
+        ...globals.node,
+      },
     },
     rules: {
       semi: ['error', 'always'],
@@ -19,15 +19,15 @@ export default [
       'no-unused-vars': 'warn',
       eqeqeq: 'error',
       'prefer-arrow-callback': 'error',
-      complexity: ['error', 15]
-    }
+      complexity: ['error', 15],
+    },
   },
   {
     files: ['tests/**/*.js'],
     languageOptions: {
       globals: {
-        ...globals.jest
-      }
-    }
-  }
+        ...globals.jest,
+      },
+    },
+  },
 ];

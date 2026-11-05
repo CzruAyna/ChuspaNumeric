@@ -1,5 +1,4 @@
 import { romberg } from '../../../src/integracion/romberg.js';
-import { simpsonCompuesto } from '../../../src/integracion/simpson_compuesto.js';
 
 describe('romberg - integración numérica', () => {
   const valorExacto = 1 / 3; // ∫₀¹ x² dx = 1/3
@@ -10,7 +9,7 @@ describe('romberg - integración numérica', () => {
     const res = romberg({
       f,
       a: 0,
-      b: 1
+      b: 1,
     });
 
     expect(res.convergio).toBe(true);
@@ -23,7 +22,7 @@ describe('romberg - integración numérica', () => {
     const res = romberg({
       f,
       a: 0,
-      b: 1
+      b: 1,
     });
 
     expect(Array.isArray(res.iteraciones)).toBe(true);
@@ -37,7 +36,7 @@ describe('romberg - integración numérica', () => {
     const res = romberg({
       f,
       a: 0,
-      b: 1
+      b: 1,
     });
 
     expect(res.meta).toHaveProperty('metodo');
@@ -49,7 +48,7 @@ describe('romberg - integración numérica', () => {
       a: 0,
       b: 1,
       nMax: 10,
-      tolerancia: 1e-8
+      tolerancia: 1e-8,
     });
   });
 });

@@ -1,7 +1,8 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import assert from 'node:assert/strict';
-import test from 'node:test';
+import { test } from '@jest/globals';
+import { parseAst } from 'rollup/parseAst';
 
 const raizProyecto = process.cwd();
 
@@ -26,12 +27,6 @@ function listarArchivosJs(directorio) {
   return archivos;
 }
 
-function limpiarComentarios(contenido) {
-  return contenido
-    .replace(/\/\*[\s\S]*?\*\//g, '')
-    .replace(/\/\/.*$/gm, '');
-}
-
 test('package.json declara sideEffects: false', () => {
   const packageJson = leerJson(join(raizProyecto, 'package.json'));
 
@@ -46,22 +41,22 @@ test('los módulos de src no tienen efectos secundarios evidentes a nivel de mó
   const sospechosos = [];
 
   for (const archivo of archivos) {
-    const contenido = limpiarComentarios(readFileSync(join(raizProyecto, archivo), 'utf8'));
-    const lineas = contenido.split('\n');
-
-    lineas.forEach((linea, indice) => {
-      const texto = linea.trim();
-
-      if (
-        texto.startsWith('console.') ||
-        texto.startsWith('process.exit') ||
-        texto.startsWith('setTimeout(') ||
-        texto.startsWith('setInterval(') ||
-        texto.startsWith('await ')
-      ) {
-        sospechosos.push(`${archivo}:${indice + 1} -> ${texto}`);
+    const contenido = readFileSync(join(raizProyecto, archivo), 'utf8');
+    const programa = parseAst(contenido);
+    for (const nodo of programa.body) {
+      if (nodo.type !== 'ExpressionStatement') continue;
+      const expresion = nodo.expression;
+      if (expresion.type === 'AwaitExpression') {
+        sospechosos.push(archivo);
+      } else if (expresion.type === 'CallExpression') {
+        const llamada = expresion.callee;
+        const nombre = llamada.type === 'Identifier' ? llamada.name : null;
+        const objeto = llamada.type === 'MemberExpression' ? llamada.object.name : null;
+        if (['setTimeout', 'setInterval'].includes(nombre) || ['console', 'process'].includes(objeto)) {
+          sospechosos.push(archivo);
+        }
       }
-    });
+    }
   }
 
   assert.deepEqual(sospechosos, []);

@@ -59,5 +59,3 @@ htmlcov/
 *.key
 *.cert
 
-# Lock files (librería: no versionar)
-package-lock.json

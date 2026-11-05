@@ -69,9 +69,9 @@ describe('gaussLegendre - cuadratura de Gauss-Legendre', () => {
   test('puntos inválido lanza error', () => {
     const f = (x) => x * x;
 
-    expect(() => gaussLegendre(f, 0, 1, 1)).toThrow('puntos debe ser 2 o 3');
-    expect(() => gaussLegendre(f, 0, 1, 4)).toThrow('puntos debe ser 2 o 3');
-    expect(() => gaussLegendre(f, 0, 1, 5)).toThrow('puntos debe ser 2 o 3');
+    expect(() => gaussLegendre(f, 0, 1, 1)).toThrow('puntos debe ser 2, 3, 4 o 5');
+    expect(() => gaussLegendre(f, 0, 1, 0)).toThrow('puntos debe ser 2, 3, 4 o 5');
+    expect(() => gaussLegendre(f, 0, 1, 6)).toThrow('puntos debe ser 2, 3, 4 o 5');
   });
 
   test('más puntos dan mejor precisión para polinomios de alto grado', () => {
@@ -88,4 +88,9 @@ describe('gaussLegendre - cuadratura de Gauss-Legendre', () => {
     // 3 puntos deben ser más precisos que 2 puntos para polinomios de alto grado
     expect(error3Puntos).toBeLessThan(error2Puntos);
   });
+});
+
+test.each([4, 5])('Gauss-Legendre de %i puntos integra hasta grado 2n-1', (puntos) => {
+  const grado = 2 * puntos - 2;
+  expect(gaussLegendre((x) => x ** grado, -1, 1, puntos)).toBeCloseTo(2 / (grado + 1), 12);
 });
