@@ -12,7 +12,7 @@
  * con el criterio de reutilización de métodos existentes del proyecto.
  */
 
-import { crearResultado } from '../core/contrato.js';
+import { crearResultado, medirTiempo } from '../core/contrato.js';
 import { ErrorParametros, ErrorDominio } from '../core/errores.js';
 import { gauss } from '../lineales/gauss.js';
 
@@ -197,6 +197,73 @@ export function regresionNoLineal({
     },
   });
 }
+
+function validarDatosLogaritmicos(x, y, potencial) {
+  if (!Array.isArray(x) || !Array.isArray(y) || x.length !== y.length || x.length < 2) {
+    throw new ErrorParametros(
+      'Se requieren dos arreglos de igual longitud con al menos dos puntos.',
+    );
+  }
+  for (let indice = 0; indice < x.length; indice++) {
+    if (!Number.isFinite(x[indice]) || !Number.isFinite(y[indice])) {
+      throw new ErrorParametros('Los datos deben contener solamente numeros finitos.');
+    }
+    if (y[indice] <= 0 || (potencial && x[indice] <= 0)) {
+      throw new ErrorParametros('El modelo requiere y > 0 y, para el ajuste potencial, x > 0.');
+    }
+  }
+}
+
+function ajustarModeloLogaritmico(x, y, potencial) {
+  validarDatosLogaritmicos(x, y, potencial);
+  const { valor, tiempo_ms } = medirTiempo(() => {
+    const abscisas = potencial ? x.map((valorX) => Math.log(valorX)) : x;
+    const ordenadas = y.map((valorY) => Math.log(valorY));
+    let mediaX = 0;
+    let mediaY = 0;
+    let varianzaX = 0;
+    let covarianza = 0;
+    for (let indice = 0; indice < x.length; indice++) {
+      const diferenciaX = abscisas[indice] - mediaX;
+      mediaX += diferenciaX / (indice + 1);
+      mediaY += (ordenadas[indice] - mediaY) / (indice + 1);
+      varianzaX += diferenciaX * (abscisas[indice] - mediaX);
+      covarianza += diferenciaX * (ordenadas[indice] - mediaY);
+    }
+    if (!Number.isFinite(varianzaX) || varianzaX <= 0) {
+      throw new ErrorParametros(
+        'Las abscisas deben ser distintas y tener dispersion representable.',
+      );
+    }
+    const b = covarianza / varianzaX;
+    const a = Math.exp(mediaY - b * mediaX);
+    if (!Number.isFinite(a) || a <= 0 || !Number.isFinite(b)) {
+      throw new ErrorParametros(
+        'Los parametros del ajuste exceden el rango numerico representable.',
+      );
+    }
+    return { a, b };
+  });
+  return crearResultado({
+    resultado: valor,
+    convergio: true,
+    mensaje: potencial ? 'Ajuste potencial completado.' : 'Ajuste exponencial completado.',
+    meta: {
+      metodo: potencial ? 'ajuste-potencial' : 'ajuste-exponencial',
+      parametros: { puntos: x.length },
+      tiempo_ms,
+    },
+  });
+}
+
+export function ajusteExponencial(x, y) {
+  return ajustarModeloLogaritmico(x, y, false);
+}
+
+export function ajustePotencial(x, y) {
+  return ajustarModeloLogaritmico(x, y, true);
+}
+
 function validarModeloNoLineal(puntos, modelo, jacobianoModelo, parametrosIniciales) {
   if (!Array.isArray(puntos) || puntos.length === 0) {
     throw new ErrorParametros(
