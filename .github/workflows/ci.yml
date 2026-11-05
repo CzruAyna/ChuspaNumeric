@@ -125,5 +125,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Instalar las dependencias reales
         run: node scripts/validar-comando-ci.mjs npm install
+      - name: Verificar formato sin exclusiones de JavaScript
+        run: node scripts/validar-comando-ci.mjs node node_modules/prettier/bin/prettier.cjs --ignore-path .gitignore --check src/analisis/regresion_no_lineal.js tests/validacion_regresion_1314.test.js
       - name: Ejecutar los 36 casos de la issue
         run: node scripts/validar-comando-ci.mjs node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --runTestsByPath tests/validacion_regresion_1314.test.js --coverage=false
