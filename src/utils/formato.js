@@ -6,8 +6,8 @@
  * @returns {number} El número redondeado.
  */
 export function redondear(valor, decimales) {
-    const factor = Math.pow(10, decimales);
-    return Math.round(valor * factor) / factor;
+  const factor = Math.pow(10, decimales);
+  return Math.round(valor * factor) / factor;
 }
 
 /**
@@ -18,7 +18,7 @@ export function redondear(valor, decimales) {
  * @returns {number} El error absoluto |actual - anterior|.
  */
 export function errorAbsoluto(actual, anterior) {
-    return Math.abs(actual - anterior);
+  return Math.abs(actual - anterior);
 }
 
 /**
@@ -31,8 +31,8 @@ export function errorAbsoluto(actual, anterior) {
  *                   o Infinity si actual es cero.
  */
 export function errorRelativo(actual, anterior) {
-    if (actual === 0) return Infinity;
-    return Math.abs((actual - anterior) / actual);
+  if (actual === 0) return Infinity;
+  return Math.abs((actual - anterior) / actual);
 }
 
 /**
@@ -43,7 +43,7 @@ export function errorRelativo(actual, anterior) {
  * @returns {number} El error porcentual (error relativo * 100).
  */
 export function errorPorcentual(actual, anterior) {
-    return errorRelativo(actual, anterior) * 100;
+  return errorRelativo(actual, anterior) * 100;
 }
 
 /**
@@ -56,5 +56,5 @@ export function errorPorcentual(actual, anterior) {
  * @returns {boolean} true si |a - b| < tolerancia, false en caso contrario.
  */
 export function aproximadamenteIgual(a, b, tolerancia) {
-    return Math.abs(a - b) < tolerancia;
+  return Math.abs(a - b) < tolerancia;
 }

@@ -24,7 +24,7 @@ import { validarNumero } from '../utils/validaciones.js';
 function evaluarHorner(coeficientes, x) {
   if (!Array.isArray(coeficientes) || coeficientes.length === 0) {
     throw new ErrorParametros(
-      `Trazo.evaluarHorner: 'coeficientes' debe ser un array no vacío. Se recibió: ${JSON.stringify(coeficientes)}.`
+      `Trazo.evaluarHorner: 'coeficientes' debe ser un array no vacío. Se recibió: ${JSON.stringify(coeficientes)}.`,
     );
   }
 

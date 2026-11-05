@@ -13,7 +13,7 @@ describe('Eliminación Gaussiana (gauss)', () => {
     // Solución exacta: x=1, y=3
     const A = [
       [2, 1],
-      [1, 3]
+      [1, 3],
     ];
     const b = [5, 10];
 
@@ -30,9 +30,9 @@ describe('Eliminación Gaussiana (gauss)', () => {
     // -2x +  y + 2z = -3
     // Solución exacta: x=2, y=3, z=-1
     const A = [
-      [ 2,  1, -1],
-      [-3, -1,  2],
-      [-2,  1,  2]
+      [2, 1, -1],
+      [-3, -1, 2],
+      [-2, 1, 2],
     ];
     const b = [8, -11, -3];
 
@@ -47,7 +47,7 @@ describe('Eliminación Gaussiana (gauss)', () => {
   test('El resultado tiene la misma cantidad de variables que el sistema', () => {
     const A = [
       [4, 1],
-      [2, 3]
+      [2, 3],
     ];
     const b = [9, 8];
 
@@ -63,13 +63,13 @@ describe('Eliminación Gaussiana (gauss)', () => {
     // [2, 4 | 6]  ← fila 2 = 2 × fila 1 → pivote nulo en col 1
     const A = [
       [1, 2],
-      [2, 4]
+      [2, 4],
     ];
     const b = [3, 6];
 
     expect(() => gauss({ A, b })).toThrow();
   });
-  
+
   test('Resuelve sistema con matriz identidad (solución igual a b)', () => {
     const A = matrizIdentidad(3);
     const b = [5, -2, 7];
@@ -94,7 +94,7 @@ describe('Eliminación Gauss-Jordan', () => {
     // Solución exacta: x=1, y=3
     const A = [
       [2, 1],
-      [1, 3]
+      [1, 3],
     ];
     const b = [5, 10];
 
@@ -111,9 +111,9 @@ describe('Eliminación Gauss-Jordan', () => {
     // -2x +  y + 2z = -3
     // Solución exacta: x=2, y=3, z=-1
     const A = [
-      [ 2,  1, -1],
-      [-3, -1,  2],
-      [-2,  1,  2]
+      [2, 1, -1],
+      [-3, -1, 2],
+      [-2, 1, 2],
     ];
     const b = [8, -11, -3];
 
@@ -128,7 +128,7 @@ describe('Eliminación Gauss-Jordan', () => {
   test('El resultado tiene la misma cantidad de variables que el sistema', () => {
     const A = [
       [4, 1],
-      [2, 3]
+      [2, 3],
     ];
     const b = [9, 8];
 
@@ -144,7 +144,7 @@ describe('Eliminación Gauss-Jordan', () => {
     // [0, 0 | 2]  ← pivote nulo sin fila de rescate
     const A = [
       [1, 0],
-      [0, 0]
+      [0, 0],
     ];
     const b = [1, 2];
 

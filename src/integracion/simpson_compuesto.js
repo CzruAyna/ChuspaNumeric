@@ -19,55 +19,52 @@ import { validarFuncion, validarIntervalo } from '../utils/validaciones.js';
  * // res.resultado ≈ 0.2
  */
 export function simpsonCompuesto(f, a, b, n) {
+  // Validaciones
+  validarFuncion(f, 'f');
+  validarIntervalo(a, b);
 
-    // Validaciones
-    validarFuncion(f, 'f');
-    validarIntervalo(a, b);
+  if (!Number.isInteger(n) || n < 2) {
+    throw new ErrorParametros(
+      `ChuspaNumeric: 'n' debe ser un entero mayor o igual a 2. Se recibió: ${n}.`,
+    );
+  }
 
-    if (!Number.isInteger(n) || n < 2) {
-        throw new ErrorParametros(
-            `ChuspaNumeric: 'n' debe ser un entero mayor o igual a 2. Se recibió: ${n}.`
-        );
+  if (n % 2 !== 0) {
+    throw new ErrorParametros(`ChuspaNumeric: 'n' debe ser par. Se recibió: ${n}.`);
+  }
+
+  const h = (b - a) / n;
+  const iteraciones = [];
+  let suma = 0;
+
+  for (let i = 0; i <= n; i++) {
+    const xi = a + i * h;
+    const fxi = f(xi);
+    let coeficiente;
+
+    if (i === 0 || i === n) {
+      coeficiente = 1;
+    } else if (i % 2 !== 0) {
+      coeficiente = 4;
+    } else {
+      coeficiente = 2;
     }
 
-    if (n % 2 !== 0) {
-        throw new ErrorParametros(
-            `ChuspaNumeric: 'n' debe ser par. Se recibió: ${n}.`
-        );
-    }
+    suma += coeficiente * fxi;
+    iteraciones.push({ i, xi, fxi, coeficiente });
+  }
 
-    const h = (b - a) / n;
-    const iteraciones = [];
-    let suma = 0;
+  const resultado = (h / 3) * suma;
 
-    for (let i = 0; i <= n; i++) {
-        const xi  = a + i * h;
-        const fxi = f(xi);
-        let coeficiente;
-
-        if (i === 0 || i === n) {
-            coeficiente = 1;
-        } else if (i % 2 !== 0) {
-            coeficiente = 4;
-        } else {
-            coeficiente = 2;
-        }
-
-        suma += coeficiente * fxi;
-        iteraciones.push({ i, xi, fxi, coeficiente });
-    }
-
-    const resultado = (h / 3) * suma;
-
-    return crearResultado({
-        resultado,
-        iteraciones,
-        convergio: true,
-        mensaje: `Simpson 1/3 compuesto completado con ${n} subintervalos.`,
-        meta: {
-            metodo: 'Simpson 1/3 Compuesto',
-            parametros: { a, b, n },
-            tiempo_ms: 0,
-        },
-    });
+  return crearResultado({
+    resultado,
+    iteraciones,
+    convergio: true,
+    mensaje: `Simpson 1/3 compuesto completado con ${n} subintervalos.`,
+    meta: {
+      metodo: 'Simpson 1/3 Compuesto',
+      parametros: { a, b, n },
+      tiempo_ms: 0,
+    },
+  });
 }

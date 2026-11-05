@@ -1,9 +1,5 @@
 function formatearTablaIteraciones(tabla, opciones = {}) {
-  const {
-    anchoColumna = 12,
-    precision = 6,
-    cabecera = true,
-  } = opciones;
+  const { anchoColumna = 12, precision = 6, cabecera = true } = opciones;
 
   if (!Array.isArray(tabla) || tabla.length === 0) {
     return '';
@@ -13,11 +9,7 @@ function formatearTablaIteraciones(tabla, opciones = {}) {
   const resultado = [];
 
   if (cabecera) {
-    resultado.push(
-      columnas
-        .map(col => col.padEnd(anchoColumna))
-        .join(' ')
-    );
+    resultado.push(columnas.map((col) => col.padEnd(anchoColumna)).join(' '));
   }
 
   tabla.forEach((fila) => {
@@ -27,15 +19,12 @@ function formatearTablaIteraciones(tabla, opciones = {}) {
           const valor = fila[col];
 
           if (typeof valor === 'number') {
-            return valor
-              .toFixed(precision)
-              .padStart(anchoColumna);
+            return valor.toFixed(precision).padStart(anchoColumna);
           }
 
-          return String(valor ?? '')
-            .padEnd(anchoColumna);
+          return String(valor ?? '').padEnd(anchoColumna);
         })
-        .join(' ')
+        .join(' '),
     );
   });
 

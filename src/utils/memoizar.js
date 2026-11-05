@@ -42,7 +42,7 @@ export function memoizarFuncion(f) {
     validarFuncion(f, 'f');
   } catch (error) {
     throw new ErrorParametros(
-      `ChuspaNumeric.memoizarFuncion: 'f' debe ser una función válida. ${error.message}`
+      `ChuspaNumeric.memoizarFuncion: 'f' debe ser una función válida. ${error.message}`,
     );
   }
 
@@ -67,7 +67,7 @@ export function memoizarFuncion(f) {
 
   funcionMemoizada.estadisticas = () => ({
     entradas: cache.size,
-    evaluacionesReales
+    evaluacionesReales,
   });
 
   return funcionMemoizada;

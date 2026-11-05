@@ -48,7 +48,7 @@ describe('splines - interpolación cúbica', () => {
 
       expect(res.iteraciones).toBeDefined();
       expect(res.iteraciones.length).toBe(xs.length);
-      
+
       // Verificar que cada iteración tiene las propiedades esperadas
       res.iteraciones.forEach((iter, i) => {
         expect(iter).toHaveProperty('i');
@@ -80,7 +80,7 @@ describe('splines - interpolación cúbica', () => {
         [0, 0],
         [1, 1],
         [2, 4],
-        [3, 9]
+        [3, 9],
       ];
 
       // Verificar que el spline pasa por cada punto exactamente
@@ -95,7 +95,7 @@ describe('splines - interpolación cúbica', () => {
       const puntos = [
         [0, 0],
         [1, 1],
-        [2, 4]
+        [2, 4],
       ];
       const x = 1.5;
 
@@ -109,18 +109,35 @@ describe('splines - interpolación cúbica', () => {
     });
 
     test('lanza error con menos de 3 puntos', () => {
-      expect(() => splines({ puntos: [[0, 0], [1, 1]], x: 0.5 })).toThrow();
+      expect(() =>
+        splines({
+          puntos: [
+            [0, 0],
+            [1, 1],
+          ],
+          x: 0.5,
+        }),
+      ).toThrow();
     });
 
     test('lanza error si puntos no están ordenados', () => {
-      expect(() => splines({ puntos: [[1, 1], [0, 0], [2, 4]], x: 0.5 })).toThrow();
+      expect(() =>
+        splines({
+          puntos: [
+            [1, 1],
+            [0, 0],
+            [2, 4],
+          ],
+          x: 0.5,
+        }),
+      ).toThrow();
     });
 
     test('lanza error si x está fuera de rango', () => {
       const puntos = [
         [0, 0],
         [1, 1],
-        [2, 4]
+        [2, 4],
       ];
       expect(() => splines({ puntos, x: 3 })).toThrow();
       expect(() => splines({ puntos, x: -1 })).toThrow();
@@ -130,13 +147,13 @@ describe('splines - interpolación cúbica', () => {
       const puntos = [
         [0, 0],
         [1, 1],
-        [2, 4]
+        [2, 4],
       ];
       const res = splines({ puntos, x: 1.5 });
 
       expect(res.iteraciones).toBeDefined();
       expect(res.iteraciones.length).toBe(puntos.length - 1);
-      
+
       // Verificar que cada iteración tiene las propiedades esperadas
       res.iteraciones.forEach((iter) => {
         expect(iter).toHaveProperty('tramo');
@@ -154,21 +171,21 @@ describe('splines - interpolación cúbica', () => {
         [0, 0],
         [1, 1],
         [2, 4],
-        [3, 9]
+        [3, 9],
       ];
       const res = splines({ puntos, x: 1.5 });
 
       // El coeficiente c está relacionado con la segunda derivada
       // Para splines cúbicos naturales, la segunda derivada debe ser continua
       const iteraciones = res.iteraciones;
-      
+
       // Verificar que tenemos coeficientes para todos los tramos
       expect(iteraciones.length).toBe(puntos.length - 1);
-      
+
       // Los coeficientes c representan 2 * segunda_derivada
       // La continuidad está garantizada por el algoritmo de Thomas
       // Verificamos que los valores son numéricos y finitos
-      iteraciones.forEach(iter => {
+      iteraciones.forEach((iter) => {
         expect(typeof iter.c).toBe('number');
         expect(isFinite(iter.c)).toBe(true);
       });

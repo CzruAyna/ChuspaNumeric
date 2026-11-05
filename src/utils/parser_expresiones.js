@@ -71,16 +71,14 @@ import { compile } from 'mathjs';
 function parsearExpresion(expresionString) {
   if (typeof expresionString !== 'string') {
     throw new Error(
-      `parsearExpresion: se esperaba un string. Se recibió: ${typeof expresionString}.`
+      `parsearExpresion: se esperaba un string. Se recibió: ${typeof expresionString}.`,
     );
   }
 
   const expr = expresionString.trim();
 
   if (expr.length === 0) {
-    throw new Error(
-      'parsearExpresion: la expresión no puede estar vacía.'
-    );
+    throw new Error('parsearExpresion: la expresión no puede estar vacía.');
   }
 
   // Compilar la expresión con mathjs — detecta sintaxis inválida en este paso
@@ -88,17 +86,13 @@ function parsearExpresion(expresionString) {
   try {
     exprCompilada = compile(expr);
   } catch (e) {
-    throw new Error(
-      `parsearExpresion: expresión inválida "${expr}". ${e.message}`
-    );
+    throw new Error(`parsearExpresion: expresión inválida "${expr}". ${e.message}`);
   }
 
   // Retornar función JS evaluable con scope restringido a { x }
   return function (x) {
     if (typeof x !== 'number' || !isFinite(x)) {
-      throw new Error(
-        `parsearExpresion: x debe ser un número finito. Se recibió: ${x}.`
-      );
+      throw new Error(`parsearExpresion: x debe ser un número finito. Se recibió: ${x}.`);
     }
 
     const resultado = exprCompilada.evaluate({ x });
@@ -106,7 +100,7 @@ function parsearExpresion(expresionString) {
     if (typeof resultado !== 'number' || !isFinite(resultado)) {
       throw new Error(
         `parsearExpresion: la expresión produjo un resultado no numérico en x=${x}. ` +
-        `Resultado: ${resultado}.`
+          `Resultado: ${resultado}.`,
       );
     }
 

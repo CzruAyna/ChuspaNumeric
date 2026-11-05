@@ -5,8 +5,7 @@ function formatearValorCSV(valor, separador, precision) {
     return '';
   }
 
-  const valorFormateado =
-    typeof valor === 'number' ? Number(valor.toFixed(precision)) : valor;
+  const valorFormateado = typeof valor === 'number' ? Number(valor.toFixed(precision)) : valor;
 
   const texto = String(valorFormateado);
   const requiereEscape =
@@ -48,7 +47,7 @@ export function exportarCSV(tabla, opciones = {}) {
 
   for (const fila of tabla) {
     const valores = columnas.map((columna) =>
-      formatearValorCSV(fila[columna], separador, precision)
+      formatearValorCSV(fila[columna], separador, precision),
     );
 
     lineas.push(valores.join(separador));

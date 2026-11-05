@@ -29,172 +29,146 @@ import { validarFuncion, validarIntervalo } from '../utils/validaciones.js';
  * @returns {Object} Objeto con la forma definida en contrato.js.
  * @throws {ErrorParametros} Si los parámetros de tolerancia o profundidad no son válidos.
  */
-export function simpsonAdaptativo({
-    f,
-    a,
-    b,
-    tolerancia = 1e-6,
-    maxProfundidad = 20
-}) {
-    validarFuncion(f, 'f');
-    validarIntervalo(a, b);
+export function simpsonAdaptativo({ f, a, b, tolerancia = 1e-6, maxProfundidad = 20 }) {
+  validarFuncion(f, 'f');
+  validarIntervalo(a, b);
 
-    if (typeof tolerancia !== 'number' || !Number.isFinite(tolerancia) || tolerancia <= 0) {
-        throw new ErrorParametros(
-            `ChuspaNumeric: 'tolerancia' debe ser un número positivo. Se recibió: ${tolerancia}.`
-        );
+  if (typeof tolerancia !== 'number' || !Number.isFinite(tolerancia) || tolerancia <= 0) {
+    throw new ErrorParametros(
+      `ChuspaNumeric: 'tolerancia' debe ser un número positivo. Se recibió: ${tolerancia}.`,
+    );
+  }
+
+  if (!Number.isInteger(maxProfundidad) || maxProfundidad < 0) {
+    throw new ErrorParametros(
+      `ChuspaNumeric: 'maxProfundidad' debe ser un entero mayor o igual a 0. Se recibió: ${maxProfundidad}.`,
+    );
+  }
+
+  const iteraciones = [];
+  const warnings = [];
+  let evaluaciones = 0;
+
+  const evaluar = (x) => {
+    const valor = f(x);
+    evaluaciones++;
+
+    if (typeof valor !== 'number' || !Number.isFinite(valor)) {
+      throw new ErrorParametros(
+        `ChuspaNumeric: la función debe devolver un número finito. En x=${x} devolvió ${valor}.`,
+      );
     }
 
-    if (!Number.isInteger(maxProfundidad) || maxProfundidad < 0) {
-        throw new ErrorParametros(
-            `ChuspaNumeric: 'maxProfundidad' debe ser un entero mayor o igual a 0. Se recibió: ${maxProfundidad}.`
-        );
+    return valor;
+  };
+
+  const simpson = (inicio, fin, fInicio, fMedio, fFin) => {
+    return ((fin - inicio) / 6) * (fInicio + 4 * fMedio + fFin);
+  };
+
+  const integrarRecursivo = (
+    inicio,
+    fin,
+    fInicio,
+    fMedio,
+    fFin,
+    aproximacionCompleta,
+    toleranciaLocal,
+    profundidad,
+  ) => {
+    const medio = (inicio + fin) / 2;
+    const cuartoIzquierdo = (inicio + medio) / 2;
+    const cuartoDerecho = (medio + fin) / 2;
+
+    const fCuartoIzquierdo = evaluar(cuartoIzquierdo);
+    const fCuartoDerecho = evaluar(cuartoDerecho);
+
+    const aproximacionIzquierda = simpson(inicio, medio, fInicio, fCuartoIzquierdo, fMedio);
+
+    const aproximacionDerecha = simpson(medio, fin, fMedio, fCuartoDerecho, fFin);
+
+    const aproximacionSubdividida = aproximacionIzquierda + aproximacionDerecha;
+    const diferencia = aproximacionSubdividida - aproximacionCompleta;
+    const errorEstimado = Math.abs(diferencia) / 15;
+    const aceptado = Math.abs(diferencia) <= 15 * toleranciaLocal;
+    const alcanzoProfundidadMaxima = profundidad >= maxProfundidad;
+
+    iteraciones.push({
+      profundidad,
+      a: inicio,
+      b: fin,
+      medio,
+      simpsonCompleto: aproximacionCompleta,
+      simpsonIzquierdo: aproximacionIzquierda,
+      simpsonDerecho: aproximacionDerecha,
+      errorEstimado,
+      tolerancia: toleranciaLocal,
+      aceptado: aceptado || alcanzoProfundidadMaxima,
+    });
+
+    if (aceptado) {
+      return aproximacionSubdividida + diferencia / 15;
     }
 
-    const iteraciones = [];
-    const warnings = [];
-    let evaluaciones = 0;
+    if (alcanzoProfundidadMaxima) {
+      warnings.push(
+        `Se alcanzó maxProfundidad=${maxProfundidad} en el intervalo [${inicio}, ${fin}].`,
+      );
 
-    const evaluar = (x) => {
-        const valor = f(x);
-        evaluaciones++;
+      return aproximacionSubdividida + diferencia / 15;
+    }
 
-        if (typeof valor !== 'number' || !Number.isFinite(valor)) {
-            throw new ErrorParametros(
-                `ChuspaNumeric: la función debe devolver un número finito. En x=${x} devolvió ${valor}.`
-            );
-        }
-
-        return valor;
-    };
-
-    const simpson = (inicio, fin, fInicio, fMedio, fFin) => {
-        return ((fin - inicio) / 6) * (fInicio + 4 * fMedio + fFin);
-    };
-
-    const integrarRecursivo = (
+    return (
+      integrarRecursivo(
         inicio,
-        fin,
+        medio,
         fInicio,
+        fCuartoIzquierdo,
         fMedio,
+        aproximacionIzquierda,
+        toleranciaLocal / 2,
+        profundidad + 1,
+      ) +
+      integrarRecursivo(
+        medio,
+        fin,
+        fMedio,
+        fCuartoDerecho,
         fFin,
-        aproximacionCompleta,
-        toleranciaLocal,
-        profundidad
-    ) => {
-        const medio = (inicio + fin) / 2;
-        const cuartoIzquierdo = (inicio + medio) / 2;
-        const cuartoDerecho = (medio + fin) / 2;
+        aproximacionDerecha,
+        toleranciaLocal / 2,
+        profundidad + 1,
+      )
+    );
+  };
 
-        const fCuartoIzquierdo = evaluar(cuartoIzquierdo);
-        const fCuartoDerecho = evaluar(cuartoDerecho);
+  const medioInicial = (a + b) / 2;
+  const fA = evaluar(a);
+  const fMedio = evaluar(medioInicial);
+  const fB = evaluar(b);
+  const aproximacionInicial = simpson(a, b, fA, fMedio, fB);
 
-        const aproximacionIzquierda = simpson(
-            inicio,
-            medio,
-            fInicio,
-            fCuartoIzquierdo,
-            fMedio
-        );
+  const resultado = integrarRecursivo(a, b, fA, fMedio, fB, aproximacionInicial, tolerancia, 0);
 
-        const aproximacionDerecha = simpson(
-            medio,
-            fin,
-            fMedio,
-            fCuartoDerecho,
-            fFin
-        );
-
-        const aproximacionSubdividida = aproximacionIzquierda + aproximacionDerecha;
-        const diferencia = aproximacionSubdividida - aproximacionCompleta;
-        const errorEstimado = Math.abs(diferencia) / 15;
-        const aceptado = Math.abs(diferencia) <= 15 * toleranciaLocal;
-        const alcanzoProfundidadMaxima = profundidad >= maxProfundidad;
-
-        iteraciones.push({
-            profundidad,
-            a: inicio,
-            b: fin,
-            medio,
-            simpsonCompleto: aproximacionCompleta,
-            simpsonIzquierdo: aproximacionIzquierda,
-            simpsonDerecho: aproximacionDerecha,
-            errorEstimado,
-            tolerancia: toleranciaLocal,
-            aceptado: aceptado || alcanzoProfundidadMaxima
-        });
-
-        if (aceptado) {
-            return aproximacionSubdividida + diferencia / 15;
-        }
-
-        if (alcanzoProfundidadMaxima) {
-            warnings.push(
-                `Se alcanzó maxProfundidad=${maxProfundidad} en el intervalo [${inicio}, ${fin}].`
-            );
-
-            return aproximacionSubdividida + diferencia / 15;
-        }
-
-        return (
-            integrarRecursivo(
-                inicio,
-                medio,
-                fInicio,
-                fCuartoIzquierdo,
-                fMedio,
-                aproximacionIzquierda,
-                toleranciaLocal / 2,
-                profundidad + 1
-            ) +
-            integrarRecursivo(
-                medio,
-                fin,
-                fMedio,
-                fCuartoDerecho,
-                fFin,
-                aproximacionDerecha,
-                toleranciaLocal / 2,
-                profundidad + 1
-            )
-        );
-    };
-
-    const medioInicial = (a + b) / 2;
-    const fA = evaluar(a);
-    const fMedio = evaluar(medioInicial);
-    const fB = evaluar(b);
-    const aproximacionInicial = simpson(a, b, fA, fMedio, fB);
-
-    const resultado = integrarRecursivo(
+  return crearResultado({
+    resultado,
+    iteraciones,
+    convergio: warnings.length === 0,
+    mensaje:
+      warnings.length > 0
+        ? `Simpson adaptativo completado con ${warnings.length} advertencia(s) de profundidad máxima.`
+        : 'Simpson adaptativo completado dentro de la tolerancia indicada.',
+    meta: {
+      metodo: 'Simpson Adaptativo',
+      parametros: {
         a,
         b,
-        fA,
-        fMedio,
-        fB,
-        aproximacionInicial,
         tolerancia,
-        0
-    );
-
-    return crearResultado({
-        resultado,
-        iteraciones,
-        convergio: warnings.length === 0,
-        mensaje: warnings.length > 0
-            ? `Simpson adaptativo completado con ${warnings.length} advertencia(s) de profundidad máxima.`
-            : 'Simpson adaptativo completado dentro de la tolerancia indicada.',
-        meta: {
-            metodo: 'Simpson Adaptativo',
-            parametros: {
-                a,
-                b,
-                tolerancia,
-                maxProfundidad,
-                evaluaciones
-            },
-            tiempo_ms: 0
-        },
-        warnings
-    });
+        maxProfundidad,
+        evaluaciones,
+      },
+      tiempo_ms: 0,
+    },
+    warnings,
+  });
 }

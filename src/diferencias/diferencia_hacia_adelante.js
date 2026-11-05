@@ -1,5 +1,5 @@
-import { ErrorParametros } from "../core/errores.js";
-import { validarFuncion, validarNumero } from "../utils/validaciones.js";
+import { ErrorParametros } from '../core/errores.js';
+import { validarFuncion, validarNumero } from '../utils/validaciones.js';
 
 /**
  * Calcula la derivada numérica usando diferencias finitas hacia adelante.
@@ -20,12 +20,12 @@ import { validarFuncion, validarNumero } from "../utils/validaciones.js";
  * console.log(resultado);
  */
 function diferenciasAdelanteGrado1(f, x, h) {
-  validarFuncion(f, "f");
-  validarNumero(x, "x");
-  validarNumero(h, "h");
+  validarFuncion(f, 'f');
+  validarNumero(x, 'x');
+  validarNumero(h, 'h');
 
   if (h === 0) {
-    throw new ErrorParametros("El parámetro h no puede ser 0.");
+    throw new ErrorParametros('El parámetro h no puede ser 0.');
   }
 
   return (f(x + h) - f(x)) / h;

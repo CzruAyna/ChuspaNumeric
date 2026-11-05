@@ -73,42 +73,26 @@ describe('derivative - derivada numérica por diferencias finitas centradas', ()
   });
 
   test('f no función lanza error', () => {
-    expect(() => derivative('not a function', 2)).toThrow(
-      "El parámetro 'f' debe ser una función"
-    );
-    expect(() => derivative(123, 2)).toThrow(
-      "El parámetro 'f' debe ser una función"
-    );
-    expect(() => derivative(null, 2)).toThrow(
-      "El parámetro 'f' debe ser una función"
-    );
+    expect(() => derivative('not a function', 2)).toThrow("El parámetro 'f' debe ser una función");
+    expect(() => derivative(123, 2)).toThrow("El parámetro 'f' debe ser una función");
+    expect(() => derivative(null, 2)).toThrow("El parámetro 'f' debe ser una función");
   });
 
   test('x no número válido lanza error', () => {
     const f = (x) => x * x;
 
     expect(() => derivative(f, 'not a number')).toThrow(
-      "El parámetro 'x' debe ser un número válido"
+      "El parámetro 'x' debe ser un número válido",
     );
-    expect(() => derivative(f, NaN)).toThrow(
-      "El parámetro 'x' debe ser un número válido"
-    );
-    expect(() => derivative(f, null)).toThrow(
-      "El parámetro 'x' debe ser un número válido"
-    );
+    expect(() => derivative(f, NaN)).toThrow("El parámetro 'x' debe ser un número válido");
+    expect(() => derivative(f, null)).toThrow("El parámetro 'x' debe ser un número válido");
   });
 
   test('h no positivo lanza error', () => {
     const f = (x) => x * x;
 
-    expect(() => derivative(f, 2, 0)).toThrow(
-      "El parámetro 'h' debe ser un número positivo"
-    );
-    expect(() => derivative(f, 2, -1e-5)).toThrow(
-      "El parámetro 'h' debe ser un número positivo"
-    );
-    expect(() => derivative(f, 2, -0.001)).toThrow(
-      "El parámetro 'h' debe ser un número positivo"
-    );
+    expect(() => derivative(f, 2, 0)).toThrow("El parámetro 'h' debe ser un número positivo");
+    expect(() => derivative(f, 2, -1e-5)).toThrow("El parámetro 'h' debe ser un número positivo");
+    expect(() => derivative(f, 2, -0.001)).toThrow("El parámetro 'h' debe ser un número positivo");
   });
 });

@@ -17,7 +17,7 @@ function ahora() {
 function validarPaso(paso) {
   if (typeof paso !== 'number' || !Number.isFinite(paso) || paso <= 0) {
     throw new ErrorParametros(
-      `ChuspaNumeric.buscarTodasLasRaices: 'paso' debe ser un número finito mayor a cero. Se recibió: ${paso}.`
+      `ChuspaNumeric.buscarTodasLasRaices: 'paso' debe ser un número finito mayor a cero. Se recibió: ${paso}.`,
     );
   }
 }
@@ -25,7 +25,7 @@ function validarPaso(paso) {
 function validarValorFuncion(valor, x) {
   if (typeof valor !== 'number' || !Number.isFinite(valor)) {
     throw new ErrorParametros(
-      `ChuspaNumeric.buscarTodasLasRaices: la función debe devolver un número finito. En x=${x} devolvió ${valor}.`
+      `ChuspaNumeric.buscarTodasLasRaices: la función debe devolver un número finito. En x=${x} devolvió ${valor}.`,
     );
   }
 }
@@ -45,7 +45,7 @@ function construirSubintervalos(f, inicio, fin, paso) {
         intervalo: [x, x],
         convergio: true,
         iteraciones: [],
-        exacta: true
+        exacta: true,
       });
     }
   };
@@ -110,7 +110,7 @@ function resolverBiseccionLocal({ f, a, b, tolerancia, maxIter }) {
     intervalo: [a, b],
     convergio,
     iteraciones,
-    exacta: false
+    exacta: false,
   };
 }
 
@@ -150,7 +150,7 @@ function resolverBiseccionWorker(tarea) {
     convergio,
     iteraciones,
     exacta: false,
-    workerThread: true
+    workerThread: true,
   };
 }
 
@@ -168,7 +168,7 @@ function crearRespuesta({
   paralelo,
   maxWorkers,
   tiempoMs,
-  benchmark = null
+  benchmark = null,
 }) {
   const ordenados = ordenarResultados(resultados);
   const raices = ordenados.map((item) => item.raiz);
@@ -187,11 +187,11 @@ function crearRespuesta({
         tolerancia,
         maxIter,
         paralelo,
-        maxWorkers
+        maxWorkers,
       },
       tiempo_ms: tiempoMs,
-      benchmark
-    }
+      benchmark,
+    },
   });
 }
 
@@ -202,35 +202,26 @@ function ejecutarSecuencial({ f, tareas, raicesExactas, tolerancia, maxIter }) {
       a: tarea.a,
       b: tarea.b,
       tolerancia,
-      maxIter
-    })
+      maxIter,
+    }),
   );
 
   return [...raicesExactas, ...calculadas];
 }
 
-async function ejecutarEnParalelo({
-  f,
-  tareas,
-  raicesExactas,
-  tolerancia,
-  maxIter,
-  maxWorkers
-}) {
+async function ejecutarEnParalelo({ f, tareas, raicesExactas, tolerancia, maxIter, maxWorkers }) {
   const fuenteFuncion = f.toString();
 
   const tareasSerializadas = tareas.map((tarea) => ({
     ...tarea,
     fuenteFuncion,
     tolerancia,
-    maxIter
+    maxIter,
   }));
 
-  const calculadas = await ejecutarParalelo(
-    tareasSerializadas,
-    resolverBiseccionWorker,
-    { maxWorkers }
-  );
+  const calculadas = await ejecutarParalelo(tareasSerializadas, resolverBiseccionWorker, {
+    maxWorkers,
+  });
 
   return [...raicesExactas, ...calculadas];
 }
@@ -289,7 +280,7 @@ export function buscarTodasLasRaices({
   maxIter = 100,
   paralelo = false,
   maxWorkers,
-  benchmark = false
+  benchmark = false,
 }) {
   validarFuncion(f, 'f');
   validarIntervalo(inicio, fin);
@@ -313,7 +304,7 @@ export function buscarTodasLasRaices({
       maxIter,
       paralelo,
       maxWorkers,
-      tiempoMs
+      tiempoMs,
     });
   }
 
@@ -328,7 +319,7 @@ export function buscarTodasLasRaices({
       benchmarkInfo = {
         secuencial_ms: secuencialMs,
         paralelo_ms: null,
-        factorMejora: null
+        factorMejora: null,
       };
     }
 
@@ -339,14 +330,13 @@ export function buscarTodasLasRaices({
       raicesExactas,
       tolerancia,
       maxIter,
-      maxWorkers
+      maxWorkers,
     });
     const paraleloMs = ahora() - inicioParalelo;
 
     if (benchmarkInfo) {
       benchmarkInfo.paralelo_ms = paraleloMs;
-      benchmarkInfo.factorMejora =
-        paraleloMs > 0 ? benchmarkInfo.secuencial_ms / paraleloMs : null;
+      benchmarkInfo.factorMejora = paraleloMs > 0 ? benchmarkInfo.secuencial_ms / paraleloMs : null;
     }
 
     return crearRespuesta({
@@ -359,7 +349,7 @@ export function buscarTodasLasRaices({
       paralelo,
       maxWorkers,
       tiempoMs: paraleloMs,
-      benchmark: benchmarkInfo
+      benchmark: benchmarkInfo,
     });
   })();
 }

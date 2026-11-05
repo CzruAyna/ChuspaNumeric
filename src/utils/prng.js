@@ -89,7 +89,7 @@ export function crearGeneradorAleatorio(semilla = null) {
   if (semilla !== null && (typeof semilla !== 'number' || !isFinite(semilla))) {
     throw new ErrorParametros(
       `ChuspaNumeric.crearGeneradorAleatorio: la semilla debe ser un número finito o null. ` +
-      `Se recibió: ${semilla} (${typeof semilla}).`
+        `Se recibió: ${semilla} (${typeof semilla}).`,
     );
   }
 

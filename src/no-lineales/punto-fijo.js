@@ -13,36 +13,38 @@ import { ErrorConvergencia } from '../core/errores.js';
  * @throws {ErrorConvergencia} Si se alcanza maxIter sin lograr la convergencia
  */
 export function puntoFijo({ g, x0, tolerancia = 1e-6, maxIter = 100 }) {
-    const iteraciones = [];
-    let xActual = x0;
+  const iteraciones = [];
+  let xActual = x0;
 
-    for (let n = 1; n <= maxIter; n++) {
-        const gx = g(xActual);
-        const error = Math.abs(gx - xActual);
+  for (let n = 1; n <= maxIter; n++) {
+    const gx = g(xActual);
+    const error = Math.abs(gx - xActual);
 
-        iteraciones.push({
-            n,
-            x: xActual,
-            gx,
-            error
-        });
+    iteraciones.push({
+      n,
+      x: xActual,
+      gx,
+      error,
+    });
 
-        if (error < tolerancia) {
-            return crearResultado({
-                resultado: gx,
-                iteraciones,
-                convergio: true,
-                mensaje: "El método de punto fijo convergió con éxito.",
-                meta: {
-                    metodo: "Punto Fijo",
-                    parametros: { x0, tolerancia, maxIter }
-                }
-            });
-        }
-
-        // El resultado evaluado pasa a ser el x del siguiente turno
-        xActual = gx;
+    if (error < tolerancia) {
+      return crearResultado({
+        resultado: gx,
+        iteraciones,
+        convergio: true,
+        mensaje: 'El método de punto fijo convergió con éxito.',
+        meta: {
+          metodo: 'Punto Fijo',
+          parametros: { x0, tolerancia, maxIter },
+        },
+      });
     }
 
-    throw new ErrorConvergencia(`Se alcanzó el máximo de iteraciones (${maxIter}) sin lograr la convergencia.`);
+    // El resultado evaluado pasa a ser el x del siguiente turno
+    xActual = gx;
+  }
+
+  throw new ErrorConvergencia(
+    `Se alcanzó el máximo de iteraciones (${maxIter}) sin lograr la convergencia.`,
+  );
 }

@@ -28,14 +28,10 @@ describe('Pruebas unitarias de formato.js', () => {
   });
 
   test('aproximadamenteIgual(1, 1.0001, 0.001) devuelve true', () => {
-    expect(
-      aproximadamenteIgual(1, 1.0001, 0.001)
-    ).toBe(true);
+    expect(aproximadamenteIgual(1, 1.0001, 0.001)).toBe(true);
   });
 
   test('aproximadamenteIgual(1, 1.0001, 1e-5) devuelve false', () => {
-    expect(
-      aproximadamenteIgual(1, 1.0001, 1e-5)
-    ).toBe(false);
+    expect(aproximadamenteIgual(1, 1.0001, 1e-5)).toBe(false);
   });
 });

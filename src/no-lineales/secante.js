@@ -1,11 +1,11 @@
-import { crearResultado } from "../core/contrato.js";
-import { ErrorDominio } from "../core/errores.js";
+import { crearResultado } from '../core/contrato.js';
+import { ErrorDominio } from '../core/errores.js';
 import {
   validarFuncion,
   validarNumero,
   validarTolerancia,
   validarIteraciones,
-} from "../utils/validaciones.js";
+} from '../utils/validaciones.js';
 
 /**
  * Encuentra una raíz mediante el método de la secante.
@@ -18,16 +18,10 @@ import {
  * @param {number} [opciones.maxIter=100]
  * @returns {Object} Resultado siguiendo el contrato de Trazo.
  */
-function secante({
-  f,
-  x0,
-  x1,
-  tolerancia = 1e-6,
-  maxIter = 100,
-}) {
-  validarFuncion(f, "f");
-  validarNumero(x0, "x0");
-  validarNumero(x1, "x1");
+function secante({ f, x0, x1, tolerancia = 1e-6, maxIter = 100 }) {
+  validarFuncion(f, 'f');
+  validarNumero(x0, 'x0');
+  validarNumero(x1, 'x1');
   validarTolerancia(tolerancia);
   validarIteraciones(maxIter);
 
@@ -44,14 +38,10 @@ function secante({
     const denominador = fxActual - fxPrev;
 
     if (denominador === 0) {
-      throw new ErrorDominio(
-        `Trazo.secante: división por cero en la iteración ${n}.`
-      );
+      throw new ErrorDominio(`Trazo.secante: división por cero en la iteración ${n}.`);
     }
 
-    const xNuevo =
-      xActual -
-      (fxActual * (xActual - xPrev)) / denominador;
+    const xNuevo = xActual - (fxActual * (xActual - xPrev)) / denominador;
 
     const error = Math.abs(xNuevo - xActual);
 
@@ -80,10 +70,10 @@ function secante({
     iteraciones,
     convergio,
     mensaje: convergio
-      ? "Método convergió correctamente."
-      : "Se alcanzó el máximo de iteraciones sin converger.",
+      ? 'Método convergió correctamente.'
+      : 'Se alcanzó el máximo de iteraciones sin converger.',
     meta: {
-      metodo: "secante",
+      metodo: 'secante',
       parametros: {
         x0,
         x1,

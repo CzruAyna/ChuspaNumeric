@@ -8,7 +8,7 @@ export {
   restaMatrices,
   multiplicarMatrices,
   transpuesta,
-  multiplicarEscalar
+  multiplicarEscalar,
 } from './algebra_matrices.js';
 
 export { normaEuclideana, normaInfinita, normaFrobenius } from './norma_matriz.js';

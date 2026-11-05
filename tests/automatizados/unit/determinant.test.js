@@ -16,7 +16,7 @@ describe('Funciones de Determinante', () => {
 
     const matriz = [
       [3, 8],
-      [4, 6]
+      [4, 6],
     ];
 
     expect(det2x2(matriz)).toBe(-14);
@@ -42,7 +42,7 @@ describe('Funciones de Determinante', () => {
     const matriz = [
       [1, 2, 3],
       [0, 4, 5],
-      [1, 0, 6]
+      [1, 0, 6],
     ];
 
     expect(det3x3(matriz)).toBe(22);
@@ -52,7 +52,7 @@ describe('Funciones de Determinante', () => {
     const matriz = [
       [1, 2, 3],
       [4, 5, 6],
-      [7, 8, 9]
+      [7, 8, 9],
     ];
 
     expect(() => det2x2(matriz)).toThrow(Error);

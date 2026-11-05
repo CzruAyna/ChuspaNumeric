@@ -5,12 +5,12 @@ export default {
       file: 'dist/chuspanumeric.cjs',
       format: 'cjs',
       exports: 'named',
-      sourcemap: true
+      sourcemap: true,
     },
     {
       file: 'dist/chuspanumeric.esm.js',
       format: 'esm',
-      sourcemap: true
-    }
-  ]
+      sourcemap: true,
+    },
+  ],
 };

@@ -18,9 +18,7 @@ describe('generarGraficoAscii - gráfico ASCII de convergencia', () => {
   test('devuelve un mensaje cuando no hay datos de error disponibles', () => {
     const resultado = generarGraficoAscii({ iteraciones: [] });
 
-    expect(resultado).toBe(
-      'No hay datos de error disponibles para graficar.'
-    );
+    expect(resultado).toBe('No hay datos de error disponibles para graficar.');
   });
 
   test('acepta directamente un arreglo de iteraciones', () => {
@@ -48,9 +46,7 @@ describe('generarGraficoAscii - gráfico ASCII de convergencia', () => {
     };
 
     const resultado = generarGraficoAscii(datos);
-    const barras = resultado
-      .split('\n')
-      .filter((linea) => linea.includes('█'));
+    const barras = resultado.split('\n').filter((linea) => linea.includes('█'));
 
     expect(barras).toHaveLength(4);
   });
@@ -70,9 +66,7 @@ describe('generarGraficoAscii - gráfico ASCII de convergencia', () => {
       .filter((linea) => linea.includes('█'))
       .map((linea) => linea.split('|').pop().trim());
 
-    const barraMasLarga = Math.max(
-      ...barras.map((barra) => barra.length)
-    );
+    const barraMasLarga = Math.max(...barras.map((barra) => barra.length));
 
     expect(barraMasLarga).toBeLessThanOrEqual(36);
   });
@@ -83,9 +77,7 @@ describe('generarGraficoAscii - gráfico ASCII de convergencia', () => {
     };
 
     const resultado = generarGraficoAscii(datos);
-    const linea = resultado
-      .split('\n')
-      .find((linea) => linea.includes('█'));
+    const linea = resultado.split('\n').find((linea) => linea.includes('█'));
 
     const barra = linea.split('|').pop().trim();
 

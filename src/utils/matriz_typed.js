@@ -1,21 +1,14 @@
-import { ErrorParametros } from "../core/errores.js";
+import { ErrorParametros } from '../core/errores.js';
 
 function validarDimension(valor, nombre) {
   if (!Number.isInteger(valor) || valor <= 0) {
-    throw new ErrorParametros(
-      `${nombre} debe ser un entero positivo (recibido: ${valor})`,
-    );
+    throw new ErrorParametros(`${nombre} debe ser un entero positivo (recibido: ${valor})`);
   }
 }
 
 function validarIndices(m, i, j) {
   const enRango =
-    Number.isInteger(i) &&
-    Number.isInteger(j) &&
-    i >= 0 &&
-    i < m.filas &&
-    j >= 0 &&
-    j < m.columnas;
+    Number.isInteger(i) && Number.isInteger(j) && i >= 0 && i < m.filas && j >= 0 && j < m.columnas;
   if (!enRango) {
     throw new ErrorParametros(
       `Índice fuera de rango: (${i}, ${j}) en una matriz de ${m.filas}x${m.columnas}`,
@@ -31,8 +24,8 @@ function validarIndices(m, i, j) {
  * @throws {ErrorParametros} Si alguna dimensión no es un entero positivo.
  */
 export function crearMatrizTyped(filas, columnas) {
-  validarDimension(filas, "filas");
-  validarDimension(columnas, "columnas");
+  validarDimension(filas, 'filas');
+  validarDimension(columnas, 'columnas');
   return { filas, columnas, datos: new Float64Array(filas * columnas) };
 }
 
@@ -44,10 +37,10 @@ export function crearMatrizTyped(filas, columnas) {
  */
 export function desdeArreglo(matriz) {
   if (!Array.isArray(matriz) || matriz.length === 0) {
-    throw new ErrorParametros("La matriz debe ser un arreglo de filas no vacío");
+    throw new ErrorParametros('La matriz debe ser un arreglo de filas no vacío');
   }
   if (!Array.isArray(matriz[0])) {
-    throw new ErrorParametros("Cada fila de la matriz debe ser un arreglo");
+    throw new ErrorParametros('Cada fila de la matriz debe ser un arreglo');
   }
   const columnas = matriz[0].length;
   for (let i = 0; i < matriz.length; i++) {

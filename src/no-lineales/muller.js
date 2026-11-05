@@ -1,6 +1,11 @@
 import { crearResultado, medirTiempo } from '../core/contrato.js';
 import { ErrorDominio, ErrorConvergencia, ErrorParametros } from '../core/errores.js';
-import { validarFuncion, validarNumero, validarTolerancia, validarIteraciones } from '../utils/validaciones.js';
+import {
+  validarFuncion,
+  validarNumero,
+  validarTolerancia,
+  validarIteraciones,
+} from '../utils/validaciones.js';
 import { errorAbsoluto } from '../utils/formato.js';
 
 /**
@@ -21,7 +26,7 @@ import { errorAbsoluto } from '../utils/formato.js';
  * @throws {ErrorConvergencia} Si no converge en maxIter iteraciones.
  */
 function muller({ f, x0, x1, x2, tolerancia = 1e-6, maxIter = 100 }) {
-  // Validaciones de Entrada 
+  // Validaciones de Entrada
   validarFuncion(f, 'f');
   validarNumero(x0, 'x0');
   validarNumero(x1, 'x1');
@@ -31,7 +36,7 @@ function muller({ f, x0, x1, x2, tolerancia = 1e-6, maxIter = 100 }) {
 
   if (x0 === x1 || x1 === x2 || x0 === x2) {
     throw new ErrorParametros(
-      `ChuspaNumeric.muller: Los puntos iniciales x0, x1 y x2 deben ser valores distintos entre sí. Se recibió: x0=${x0}, x1=${x1}, x2=${x2}`
+      `ChuspaNumeric.muller: Los puntos iniciales x0, x1 y x2 deben ser valores distintos entre sí. Se recibió: x0=${x0}, x1=${x1}, x2=${x2}`,
     );
   }
 
@@ -41,7 +46,9 @@ function muller({ f, x0, x1, x2, tolerancia = 1e-6, maxIter = 100 }) {
 
   // Medición de tiempo usando el estándar oficial del repositorio
   const { valor: resultadoRaiz, tiempo_ms } = medirTiempo(() => {
-    let a = x0, b = x1, c = x2;
+    let a = x0,
+      b = x1,
+      c = x2;
 
     for (let n = 1; n <= maxIter; n++) {
       const fa = f(a);
@@ -68,13 +75,12 @@ function muller({ f, x0, x1, x2, tolerancia = 1e-6, maxIter = 100 }) {
       const sqrtDisc = Math.sqrt(Math.abs(discriminante));
 
       // Determinación del denominador de mayor magnitud para estabilidad
-      const denominador = Math.abs(B + sqrtDisc) >= Math.abs(B - sqrtDisc)
-        ? B + sqrtDisc
-        : B - sqrtDisc;
+      const denominador =
+        Math.abs(B + sqrtDisc) >= Math.abs(B - sqrtDisc) ? B + sqrtDisc : B - sqrtDisc;
 
       if (denominador === 0) {
         throw new ErrorDominio(
-          `ChuspaNumeric.muller: División por cero detectada en la iteración ${n} por denominador nulo.`
+          `ChuspaNumeric.muller: División por cero detectada en la iteración ${n} por denominador nulo.`,
         );
       }
 
@@ -99,7 +105,7 @@ function muller({ f, x0, x1, x2, tolerancia = 1e-6, maxIter = 100 }) {
     }
 
     throw new ErrorConvergencia(
-      `ChuspaNumeric.muller: no convergió en ${maxIter} iteraciones con tolerancia ${tolerancia}.`
+      `ChuspaNumeric.muller: no convergió en ${maxIter} iteraciones con tolerancia ${tolerancia}.`,
     );
   });
 
@@ -112,8 +118,8 @@ function muller({ f, x0, x1, x2, tolerancia = 1e-6, maxIter = 100 }) {
     meta: {
       metodo: 'Müller',
       parametros: { x0, x1, x2, tolerancia, maxIter },
-      tiempo_ms
-    }
+      tiempo_ms,
+    },
   });
 }
 

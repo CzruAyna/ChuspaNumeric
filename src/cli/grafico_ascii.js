@@ -11,14 +11,7 @@ function obtenerIteraciones(datos) {
 }
 
 function obtenerError(iteracion) {
-  const posiblesCampos = [
-    'error',
-    'errorAbsoluto',
-    'error_relativo',
-    'errorRelativo',
-    'ea',
-    'er',
-  ];
+  const posiblesCampos = ['error', 'errorAbsoluto', 'error_relativo', 'errorRelativo', 'ea', 'er'];
 
   for (const campo of posiblesCampos) {
     const valor = iteracion[campo];
@@ -70,10 +63,7 @@ export function generarGraficoAscii(datos, opciones = {}) {
     return 'No hay datos de error disponibles para graficar.';
   }
 
-  const anchoTerminal =
-    opciones.ancho ??
-    process.stdout.columns ??
-    80;
+  const anchoTerminal = opciones.ancho ?? process.stdout.columns ?? 80;
 
   const anchoEtiqueta = 24;
   const anchoGrafico = Math.max(10, anchoTerminal - anchoEtiqueta);
@@ -85,15 +75,15 @@ export function generarGraficoAscii(datos, opciones = {}) {
     '-'.repeat(Math.min(anchoTerminal, anchoEtiqueta + anchoGrafico)),
   ];
 
- for (const punto of puntos) {
-  const proporcion = maxError === 0 ? 0 : punto.error / maxError;
-  const longitud = punto.error === 0 ? 1 : Math.max(1, Math.round(proporcion * anchoGrafico));
-  const barra = '\u2588'.repeat(longitud);
+  for (const punto of puntos) {
+    const proporcion = maxError === 0 ? 0 : punto.error / maxError;
+    const longitud = punto.error === 0 ? 1 : Math.max(1, Math.round(proporcion * anchoGrafico));
+    const barra = '\u2588'.repeat(longitud);
 
-  const iteracionTexto = String(punto.iteracion).padStart(9, ' ');
-  const errorTexto = formatearNumero(punto.error).padStart(12, ' ');
+    const iteracionTexto = String(punto.iteracion).padStart(9, ' ');
+    const errorTexto = formatearNumero(punto.error).padStart(12, ' ');
 
-  lineas.push(`${iteracionTexto} | ${errorTexto} | ${barra}`);
-}
+    lineas.push(`${iteracionTexto} | ${errorTexto} | ${barra}`);
+  }
   return lineas.join('\n');
 }

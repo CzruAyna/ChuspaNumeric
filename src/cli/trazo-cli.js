@@ -106,11 +106,7 @@ await verificarVersion();
 
 const { command, args } = parseArgs(process.argv.slice(2));
 
-if (
-  !command ||
-  process.argv.includes('--help') ||
-  process.argv.includes('-h')
-) {
+if (!command || process.argv.includes('--help') || process.argv.includes('-h')) {
   showHelp();
   process.exit(0);
 }
@@ -118,11 +114,7 @@ if (
 try {
   switch (command) {
     case 'biseccion': {
-      if (
-        args.f === undefined ||
-        args.a === undefined ||
-        args.b === undefined
-      ) {
+      if (args.f === undefined || args.a === undefined || args.b === undefined) {
         throw new Error('Debe proporcionar --f, --a y --b.');
       }
 
@@ -131,13 +123,8 @@ try {
         a: parseNumber(args.a, 'a'),
         b: parseNumber(args.b, 'b'),
         tolerancia:
-          args.tolerancia !== undefined
-            ? parseNumber(args.tolerancia, 'tolerancia')
-            : undefined,
-        maxIter:
-          args.maxIter !== undefined
-            ? parseNumber(args.maxIter, 'maxIter')
-            : undefined,
+          args.tolerancia !== undefined ? parseNumber(args.tolerancia, 'tolerancia') : undefined,
+        maxIter: args.maxIter !== undefined ? parseNumber(args.maxIter, 'maxIter') : undefined,
       });
 
       mostrarResultado(resultado, args);
@@ -148,11 +135,7 @@ try {
     case 'newton-raphson': {
       const x0 = args.x0 ?? args.xInicial;
 
-      if (
-        args.f === undefined ||
-        args.df === undefined ||
-        x0 === undefined
-      ) {
+      if (args.f === undefined || args.df === undefined || x0 === undefined) {
         throw new Error('Debe proporcionar --f, --df y --x0.');
       }
 
@@ -166,13 +149,8 @@ try {
         x0: parseNumber(x0, 'x0'),
         xInicial: parseNumber(x0, 'x0'),
         tolerancia:
-          args.tolerancia !== undefined
-            ? parseNumber(args.tolerancia, 'tolerancia')
-            : undefined,
-        maxIter:
-          args.maxIter !== undefined
-            ? parseNumber(args.maxIter, 'maxIter')
-            : undefined,
+          args.tolerancia !== undefined ? parseNumber(args.tolerancia, 'tolerancia') : undefined,
+        maxIter: args.maxIter !== undefined ? parseNumber(args.maxIter, 'maxIter') : undefined,
       });
 
       mostrarResultado(resultado, args);

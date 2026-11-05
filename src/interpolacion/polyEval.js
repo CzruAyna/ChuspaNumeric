@@ -6,7 +6,7 @@
  */
 export function polyEval(coefficients, x) {
   if (!Array.isArray(coefficients) || coefficients.length === 0) {
-    throw new Error("El array de coeficientes no puede estar vacío");
+    throw new Error('El array de coeficientes no puede estar vacío');
   }
 
   let result = coefficients[0];

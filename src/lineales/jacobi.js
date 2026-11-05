@@ -1,11 +1,11 @@
-import { crearResultado } from "../core/contrato.js";
-import { ErrorDominio } from "../core/errores.js";
+import { crearResultado } from '../core/contrato.js';
+import { ErrorDominio } from '../core/errores.js';
 import {
   validarMatrizCuadrada,
   validarVector,
   validarTolerancia,
   validarIteraciones,
-} from "../utils/validaciones.js";
+} from '../utils/validaciones.js';
 
 /**
  * Resuelve un sistema lineal A·x = b mediante el Método iterativo de Jacobi.
@@ -37,12 +37,12 @@ function jacobi({ A, b, x0, tolerancia = 1e-6, maxIter = 100 }) {
     if (A[i][i] === 0) {
       throw new ErrorDominio(
         `ChuspaNumeric.jacobi: el elemento diagonal A[${i}][${i}] es cero. ` +
-        `Considera reordenar las filas para que la diagonal sea no nula.`
+          `Considera reordenar las filas para que la diagonal sea no nula.`,
       );
     }
   }
 
-  // Iteraciones de Jacobi 
+  // Iteraciones de Jacobi
 
   let x = [...xInicial];
   const iteraciones = [];
@@ -59,9 +59,7 @@ function jacobi({ A, b, x0, tolerancia = 1e-6, maxIter = 100 }) {
       xNuevo[i] = (b[i] - suma) / A[i][i];
     }
 
-    const error = Math.sqrt(
-      xNuevo.reduce((acum, val, i) => acum + (val - x[i]) ** 2, 0)
-    );
+    const error = Math.sqrt(xNuevo.reduce((acum, val, i) => acum + (val - x[i]) ** 2, 0));
 
     iteraciones.push({ n: iter + 1, x: [...xNuevo], error });
 
@@ -81,7 +79,7 @@ function jacobi({ A, b, x0, tolerancia = 1e-6, maxIter = 100 }) {
       ? `Convergió en ${iteraciones.length} iteraciones.`
       : `Se alcanzó el máximo de ${maxIter} iteraciones sin converger.`,
     meta: {
-      metodo: "jacobi",
+      metodo: 'jacobi',
       parametros: { A, b, x0: xInicial, tolerancia, maxIter },
       tiempo_ms: 0,
     },

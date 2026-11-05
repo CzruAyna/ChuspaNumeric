@@ -1,4 +1,3 @@
-
 import {
   construirTablaAdelante,
   construirTablaAtras,
@@ -6,12 +5,7 @@ import {
 } from '../../../src/analisis/tabla_diferencias.js';
 
 describe('Tabla de diferencias', () => {
-  const tablaEsperada = [
-    [1, 4, 9, 16],
-    [3, 5, 7],
-    [2, 2],
-    [0],
-  ];
+  const tablaEsperada = [[1, 4, 9, 16], [3, 5, 7], [2, 2], [0]];
 
   test('construirTablaAdelante genera la tabla esperada', () => {
     expect(construirTablaAdelante([1, 4, 9, 16])).toEqual(tablaEsperada);

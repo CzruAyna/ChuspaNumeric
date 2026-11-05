@@ -49,7 +49,7 @@ function _validarComplejo(z, nombre) {
   ) {
     throw new ErrorParametros(
       `ChuspaNumeric.numeros_complejos: "${nombre}" debe ser un objeto { re, im } con ` +
-      `valores numéricos finitos. Se recibió: ${JSON.stringify(z)}.`
+        `valores numéricos finitos. Se recibió: ${JSON.stringify(z)}.`,
     );
   }
 }
@@ -170,7 +170,7 @@ export function divisionComplejos(z1, z2) {
   if (denominador === 0) {
     throw new ErrorParametros(
       'ChuspaNumeric.divisionComplejos: el denominador es el complejo cero { re: 0, im: 0 }. ' +
-      'La división por cero no está definida.'
+        'La división por cero no está definida.',
     );
   }
 

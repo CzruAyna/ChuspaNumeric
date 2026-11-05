@@ -1,7 +1,7 @@
 import { newtonRaphson } from '../../../src/no-lineales/newton-raphson.js';
 
 describe('newton-raphson', () => {
-  const f  = (x) => x ** 2 - 2;
+  const f = (x) => x ** 2 - 2;
   const df = (x) => 2 * x;
 
   test('encuentra raíz de x^2 - 2 desde x0=1 con tolerancia 1e-5', () => {
@@ -27,7 +27,7 @@ describe('newton-raphson', () => {
 
   test('encuentra raíz en caso exitoso adicional (x^3 - 27 = 0)', () => {
     const f3 = (x) => x ** 3 - 27;
-    const df3 = (x) => 3 * (x ** 2);
+    const df3 = (x) => 3 * x ** 2;
 
     const res = newtonRaphson({ f: f3, df: df3, x0: 5, tolerancia: 1e-5 });
 

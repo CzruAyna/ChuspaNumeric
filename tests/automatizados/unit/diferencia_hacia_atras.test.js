@@ -1,4 +1,3 @@
-
 import { diferenciasAtrasGrado1 } from '../../../src/diferencias/diferencia_hacia_atras.js';
 
 describe('diferenciasAtrasGrado1 - diferencias finitas hacia atrás', () => {
@@ -19,7 +18,7 @@ describe('diferenciasAtrasGrado1 - diferencias finitas hacia atrás', () => {
     const f = (x) => x * x;
 
     expect(() => diferenciasAtrasGrado1(f, 2, 0)).toThrow(
-      new Error('El tamaño del paso h no puede ser cero.')
+      new Error('El tamaño del paso h no puede ser cero.'),
     );
   });
 

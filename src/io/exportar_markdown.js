@@ -21,14 +21,15 @@ function _generarTablaMarkdown(iteraciones) {
   const columnas = Object.keys(iteraciones[0]);
 
   const encabezado = '| ' + columnas.join(' | ') + ' |';
-  const separador  = '| ' + columnas.map(() => '---').join(' | ') + ' |';
+  const separador = '| ' + columnas.map(() => '---').join(' | ') + ' |';
 
   const filas = iteraciones.map((iter) => {
     const valores = columnas.map((col) => {
       const val = iter[col];
       if (typeof val === 'number') return val.toFixed(6);
       if (val === null || val === undefined) return '—';
-      if (Array.isArray(val)) return `[${val.map(v => typeof v === 'number' ? v.toFixed(4) : v).join(', ')}]`;
+      if (Array.isArray(val))
+        return `[${val.map((v) => (typeof v === 'number' ? v.toFixed(4) : v)).join(', ')}]`;
       return String(val);
     });
     return '| ' + valores.join(' | ') + ' |';
@@ -95,29 +96,26 @@ function exportarMarkdown(resultado, opciones = {}) {
   const {
     resultado: valor,
     iteraciones = [],
-    convergio   = false,
-    mensaje     = '',
-    meta        = {},
+    convergio = false,
+    mensaje = '',
+    meta = {},
   } = resultado;
 
-  const {
-    metodo     = 'método',
-    parametros = {},
-    tiempo_ms  = 0,
-  } = meta;
+  const { metodo = 'método', parametros = {}, tiempo_ms = 0 } = meta;
 
   const titulo = opciones.titulo || `Reporte — ${metodo}`;
 
   // Sección de parámetros de entrada
-  const seccionParametros = Object.keys(parametros).length > 0
-    ? Object.entries(parametros)
-        .map(([k, v]) => {
-          if (typeof v === 'function') return `| \`${k}\` | _(función)_ |`;
-          if (Array.isArray(v)) return `| \`${k}\` | \`[${v}]\` |`;
-          return `| \`${k}\` | \`${v}\` |`;
-        })
-        .join('\n')
-    : '| — | — |';
+  const seccionParametros =
+    Object.keys(parametros).length > 0
+      ? Object.entries(parametros)
+          .map(([k, v]) => {
+            if (typeof v === 'function') return `| \`${k}\` | _(función)_ |`;
+            if (Array.isArray(v)) return `| \`${k}\` | \`[${v}]\` |`;
+            return `| \`${k}\` | \`${v}\` |`;
+          })
+          .join('\n')
+      : '| — | — |';
 
   // Construir el documento Markdown
   const lineas = [

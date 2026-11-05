@@ -14,7 +14,7 @@ function crearResultado({
   resultado,
   iteraciones = [],
   convergio = false,
-  mensaje = "",
+  mensaje = '',
   meta = {},
   warnings = [],
 }) {
@@ -24,9 +24,9 @@ function crearResultado({
     convergio,
     mensaje,
     meta: {
-      metodo:     meta.metodo     ?? "",
+      metodo: meta.metodo ?? '',
       parametros: meta.parametros ?? {},
-      tiempo_ms:  meta.tiempo_ms  ?? 0,
+      tiempo_ms: meta.tiempo_ms ?? 0,
     },
   };
 
@@ -36,7 +36,7 @@ function crearResultado({
 
   return resultadoBase;
 }
- 
+
 /**
  * Ejecuta una función y mide su tiempo de ejecución en milisegundos.
  *
@@ -48,17 +48,17 @@ function crearResultado({
  * const { valor, tiempo_ms } = medirTiempo(() => biseccion({ f, a: 0, b: 3 }));
  */
 function medirTiempo(fn) {
-  if (typeof fn !== "function") {
+  if (typeof fn !== 'function') {
     throw new TypeError(
-      `ChuspaNumeric.medirTiempo: 'fn' debe ser una función. Se recibió: ${typeof fn}`
+      `ChuspaNumeric.medirTiempo: 'fn' debe ser una función. Se recibió: ${typeof fn}`,
     );
   }
- 
-  const inicio    = performance.now();
-  const valor     = fn();
+
+  const inicio = performance.now();
+  const valor = fn();
   const tiempo_ms = performance.now() - inicio;
- 
+
   return { valor, tiempo_ms };
 }
- 
+
 export { crearResultado, medirTiempo };

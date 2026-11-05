@@ -3,8 +3,8 @@
  * Utiles para tests, ejemplos y validacion de metodos numericos.
  */
 
-import { ErrorDominio } from "../core/errores.js";
-import { crearGeneradorAleatorio } from "./prng.js";
+import { ErrorDominio } from '../core/errores.js';
+import { crearGeneradorAleatorio } from './prng.js';
 
 /**
  * Crea una matriz identidad de tamano n*n.
@@ -15,11 +15,11 @@ import { crearGeneradorAleatorio } from "./prng.js";
 export function matrizIdentidad(n) {
   if (!Number.isInteger(n) || n <= 0) {
     throw new ErrorDominio(
-      `ChuspaNumeric.matrizIdentidad: n debe ser un entero positivo. Recibido: ${n}`
+      `ChuspaNumeric.matrizIdentidad: n debe ser un entero positivo. Recibido: ${n}`,
     );
   }
   return Array.from({ length: n }, (_, i) =>
-    Array.from({ length: n }, (_, j) => (i === j ? 1 : 0))
+    Array.from({ length: n }, (_, j) => (i === j ? 1 : 0)),
   );
 }
 
@@ -35,12 +35,10 @@ export function matrizIdentidad(n) {
 export function matrizHilbert(n) {
   if (!Number.isInteger(n) || n <= 0) {
     throw new ErrorDominio(
-      `ChuspaNumeric.matrizHilbert: n debe ser un entero positivo. Recibido: ${n}`
+      `ChuspaNumeric.matrizHilbert: n debe ser un entero positivo. Recibido: ${n}`,
     );
   }
-  return Array.from({ length: n }, (_, i) =>
-    Array.from({ length: n }, (_, j) => 1 / (i + j + 1))
-  );
+  return Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => 1 / (i + j + 1)));
 }
 
 /**
@@ -55,7 +53,7 @@ export function matrizHilbert(n) {
 export function matrizDiagonalDominante(n, semilla = null) {
   if (!Number.isInteger(n) || n <= 0) {
     throw new ErrorDominio(
-      `ChuspaNumeric.matrizDiagonalDominante: n debe ser un entero positivo. Recibido: ${n}`
+      `ChuspaNumeric.matrizDiagonalDominante: n debe ser un entero positivo. Recibido: ${n}`,
     );
   }
 
@@ -67,10 +65,7 @@ export function matrizDiagonalDominante(n, semilla = null) {
       return random() * 10 - 5;
     });
 
-    const sumaOffDiagonal = fila.reduce(
-      (s, v, j) => s + (i !== j ? Math.abs(v) : 0),
-      0
-    );
+    const sumaOffDiagonal = fila.reduce((s, v, j) => s + (i !== j ? Math.abs(v) : 0), 0);
     fila[i] = sumaOffDiagonal + random() * 5 + 1;
 
     return fila;
@@ -90,15 +85,13 @@ export function matrizDiagonalDominante(n, semilla = null) {
 export function matrizSimetricaDefinidaPositiva(n, semilla = null) {
   if (!Number.isInteger(n) || n <= 0) {
     throw new ErrorDominio(
-      `ChuspaNumeric.matrizSimetricaDefinidaPositiva: n debe ser un entero positivo. Recibido: ${n}`
+      `ChuspaNumeric.matrizSimetricaDefinidaPositiva: n debe ser un entero positivo. Recibido: ${n}`,
     );
   }
 
   const random = crearGeneradorAleatorio(semilla);
 
-  const B = Array.from({ length: n }, () =>
-    Array.from({ length: n }, () => random() * 10 - 5)
-  );
+  const B = Array.from({ length: n }, () => Array.from({ length: n }, () => random() * 10 - 5));
 
   const BTB = Array.from({ length: n }, (_, i) =>
     Array.from({ length: n }, (_, j) => {
@@ -107,7 +100,7 @@ export function matrizSimetricaDefinidaPositiva(n, semilla = null) {
         suma += B[k][i] * B[k][j];
       }
       return suma;
-    })
+    }),
   );
 
   for (let i = 0; i < n; i++) {
@@ -125,10 +118,7 @@ export function matrizSimetricaDefinidaPositiva(n, semilla = null) {
 export function esDiagonalDominante(A) {
   return A.every((fila, i) => {
     const diagonal = Math.abs(fila[i]);
-    const sumaResto = fila.reduce(
-      (s, v, j) => s + (i !== j ? Math.abs(v) : 0),
-      0
-    );
+    const sumaResto = fila.reduce((s, v, j) => s + (i !== j ? Math.abs(v) : 0), 0);
     return diagonal > sumaResto;
   });
 }

@@ -1,9 +1,6 @@
-import { crearResultado } from "../core/contrato.js";
-import { ErrorParametros, ErrorDominio } from "../core/errores.js";
-import {
-  validarMatrizCuadrada,
-  validarVector,
-} from "../utils/validaciones.js";
+import { crearResultado } from '../core/contrato.js';
+import { ErrorParametros, ErrorDominio } from '../core/errores.js';
+import { validarMatrizCuadrada, validarVector } from '../utils/validaciones.js';
 
 function validarSimetria(A, n) {
   for (let i = 0; i < n; i++) {
@@ -11,7 +8,7 @@ function validarSimetria(A, n) {
       if (Math.abs(A[i][j] - A[j][i]) > 1e-10) {
         throw new ErrorParametros(
           `Cholesky: la matriz no es simétrica. ` +
-          `A[${i}][${j}] = ${A[i][j]}, A[${j}][${i}] = ${A[j][i]}.`
+            `A[${i}][${j}] = ${A[i][j]}, A[${j}][${i}] = ${A[j][i]}.`,
         );
       }
     }
@@ -48,7 +45,7 @@ function descomposicionCholesky(A) {
     if (diagonal <= 0) {
       throw new ErrorDominio(
         `Cholesky:La matriz no es definida positiva. ` +
-        `El elemento diagonal en [${j}][${j}] resultó ${diagonal} ≤ 0 al factorizar.`
+          `El elemento diagonal en [${j}][${j}] resultó ${diagonal} ≤ 0 al factorizar.`,
       );
     }
 
@@ -62,7 +59,7 @@ function descomposicionCholesky(A) {
 
     iteraciones.push({
       n: j + 1,
-      paso: "factorizacion",
+      paso: 'factorizacion',
       descripcion: `Columna ${j} completada. L[${j}][${j}] = ${L[j][j].toFixed(6)}`,
       L: L.map((fila) => [...fila]),
     });
@@ -74,7 +71,7 @@ function descomposicionCholesky(A) {
     convergio: true,
     mensaje: `Descomposición de Cholesky completada en ${n} pasos.`,
     meta: {
-      metodo: "cholesky",
+      metodo: 'cholesky',
       parametros: { A },
       tiempo_ms: 0,
     },
@@ -109,7 +106,7 @@ function resolverCholesky(L, b) {
 
     iteraciones.push({
       n: ++numPaso,
-      paso: "sustitucion-adelante",
+      paso: 'sustitucion-adelante',
       descripcion: `y[${i}] = ${y[i].toFixed(6)}`,
     });
   }
@@ -123,7 +120,7 @@ function resolverCholesky(L, b) {
 
     iteraciones.push({
       n: ++numPaso,
-      paso: "sustitucion-atras",
+      paso: 'sustitucion-atras',
       descripcion: `x[${i}] = ${x[i].toFixed(6)}`,
     });
   }
@@ -134,7 +131,7 @@ function resolverCholesky(L, b) {
     convergio: true,
     mensaje: `Sistema resuelto mediante Cholesky en ${numPaso} pasos.`,
     meta: {
-      metodo: "cholesky-solver",
+      metodo: 'cholesky-solver',
       parametros: { b },
       tiempo_ms: 0,
     },

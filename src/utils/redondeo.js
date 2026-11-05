@@ -39,9 +39,4 @@ function esIgualConTolerancia(a, b, tol) {
   return Math.abs(a - b) <= tol;
 }
 
-export {
-  redondearDecimales,
-  truncarDecimales,
-  cifrasSignificativas,
-  esIgualConTolerancia
-};
+export { redondearDecimales, truncarDecimales, cifrasSignificativas, esIgualConTolerancia };

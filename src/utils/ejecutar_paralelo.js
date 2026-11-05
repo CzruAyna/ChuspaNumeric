@@ -5,7 +5,7 @@ function serializarError(error) {
   return {
     name: error && error.name ? error.name : 'Error',
     message: error && error.message ? error.message : String(error),
-    stack: error && error.stack ? error.stack : null
+    stack: error && error.stack ? error.stack : null,
   };
 }
 
@@ -20,13 +20,13 @@ async function ejecutarLoteEnWorker() {
       resultados.push({
         index: item.index,
         ok: true,
-        resultado
+        resultado,
       });
     } catch (error) {
       resultados.push({
         index: item.index,
         ok: false,
-        error: serializarError(error)
+        error: serializarError(error),
       });
     }
   }
@@ -40,13 +40,13 @@ if (!isMainThread && workerData && workerData.tipo === 'chuspanumeric-ejecutar-p
 
 function obtenerNumeroWorkers(maxWorkers, totalTareas) {
   const totalCpus =
-    typeof availableParallelism === 'function'
-      ? availableParallelism()
-      : cpus().length;
+    typeof availableParallelism === 'function' ? availableParallelism() : cpus().length;
 
   if (maxWorkers !== undefined) {
     if (!Number.isInteger(maxWorkers) || maxWorkers < 1) {
-      throw new Error(`'maxWorkers' debe ser un entero mayor o igual a 1. Se recibió: ${maxWorkers}.`);
+      throw new Error(
+        `'maxWorkers' debe ser un entero mayor o igual a 1. Se recibió: ${maxWorkers}.`,
+      );
     }
 
     return Math.min(maxWorkers, totalTareas);
@@ -72,8 +72,8 @@ function ejecutarWorker(lote, ejecutarTarea) {
       workerData: {
         tipo: 'chuspanumeric-ejecutar-paralelo',
         ejecutarTarea: ejecutarTarea.toString(),
-        tareas: lote
-      }
+        tareas: lote,
+      },
     });
 
     worker.once('message', (mensaje) => {
@@ -127,9 +127,7 @@ export async function ejecutarParalelo(tareas, ejecutarTarea, opciones = {}) {
   const lotes = dividirTareas(tareas, cantidadWorkers);
   const resultados = new Array(tareas.length);
 
-  const respuestas = await Promise.all(
-    lotes.map((lote) => ejecutarWorker(lote, ejecutarTarea))
-  );
+  const respuestas = await Promise.all(lotes.map((lote) => ejecutarWorker(lote, ejecutarTarea)));
 
   for (const loteResultado of respuestas) {
     for (const item of loteResultado) {

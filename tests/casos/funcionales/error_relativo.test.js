@@ -2,7 +2,7 @@ import { newtonRaphson } from '../../../src/no-lineales/newton-raphson.js';
 
 describe('error relativo - newton-raphson', () => {
   test('el error en cada iteración decrece hasta ser menor a tolerancia', () => {
-    const f  = (x) => x ** 2 - 2;
+    const f = (x) => x ** 2 - 2;
     const df = (x) => 2 * x;
     const tolerancia = 1e-5;
 
@@ -34,7 +34,7 @@ describe('error relativo - newton-raphson', () => {
 
   test('evalúa error relativo en un caso exitoso adicional (x^3 - 8 = 0)', () => {
     const f = (x) => x ** 3 - 8;
-    const df = (x) => 3 * (x ** 2);
+    const df = (x) => 3 * x ** 2;
     const tolerancia = 1e-5;
 
     const res = newtonRaphson({ f, df, x0: 3, tolerancia });

@@ -45,7 +45,7 @@ export function rungeKutta4({ f, x0, y0, h, xFinal }) {
   let y = y0;
   let n = 0;
 
-  while (x <= xFinal + 1e-10  ) {
+  while (x <= xFinal + 1e-10) {
     const k1 = f(x, y);
     const k2 = f(x + h / 2, y + (h * k1) / 2);
     const k3 = f(x + h / 2, y + (h * k2) / 2);
@@ -58,15 +58,12 @@ export function rungeKutta4({ f, x0, y0, h, xFinal }) {
       k1,
       k2,
       k3,
-      k4
+      k4,
     });
 
     resultado.push([x, y]);
 
-    y =
-      y +
-      (h / 6) *
-        (k1 + 2 * k2 + 2 * k3 + k4);
+    y = y + (h / 6) * (k1 + 2 * k2 + 2 * k3 + k4);
 
     x += h;
     n++;
@@ -83,8 +80,8 @@ export function rungeKutta4({ f, x0, y0, h, xFinal }) {
         x0,
         y0,
         h,
-        xFinal
-      }
-    }
+        xFinal,
+      },
+    },
   });
-} 
+}

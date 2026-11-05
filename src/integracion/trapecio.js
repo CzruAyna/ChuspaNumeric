@@ -4,8 +4,8 @@
  * en n subintervalos iguales y sumando el área de los trapecios formados.
  */
 
-import { crearResultado, medirTiempo } from "../core/contrato.js";
-import { validarFuncion, validarIntervalo } from "../utils/validaciones.js";
+import { crearResultado, medirTiempo } from '../core/contrato.js';
+import { validarFuncion, validarIntervalo } from '../utils/validaciones.js';
 
 /**
  * Calcula la integral definida de una función usando la regla del trapecio compuesta.
@@ -28,13 +28,11 @@ import { validarFuncion, validarIntervalo } from "../utils/validaciones.js";
  */
 function trapecio({ f, a, b, n = 100 }) {
   // ── 1. VALIDACIONES ─────────────────────────────────────────
-  validarFuncion(f, "f");
+  validarFuncion(f, 'f');
   validarIntervalo(a, b);
 
   if (!Number.isInteger(n) || n <= 0) {
-    throw new Error(
-      `ChuspaNumeric.trapecio: n debe ser un entero positivo. Se recibió: ${n}`
-    );
+    throw new Error(`ChuspaNumeric.trapecio: n debe ser un entero positivo. Se recibió: ${n}`);
   }
 
   // ── 2. CÁLCULO (medido con medirTiempo) ─────────────────────
@@ -70,7 +68,7 @@ function trapecio({ f, a, b, n = 100 }) {
     convergio: true,
     mensaje: `Integración por regla del trapecio con ${n} subintervalos.`,
     meta: {
-      metodo: "trapecio",
+      metodo: 'trapecio',
       parametros: { f, a, b, n },
       tiempo_ms,
     },

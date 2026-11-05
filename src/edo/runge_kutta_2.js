@@ -15,9 +15,7 @@ function validarEntradas(f, y0, t0, tFinal, h) {
   validarNumero(h, 'h');
 
   if (tFinal <= t0) {
-    throw new ErrorParametros(
-      `Trazo: 'tFinal' (${tFinal}) debe ser mayor que 't0' (${t0}).`
-    );
+    throw new ErrorParametros(`Trazo: 'tFinal' (${tFinal}) debe ser mayor que 't0' (${t0}).`);
   }
   if (h <= 0) {
     throw new Error('h debe ser mayor que 0');
@@ -80,10 +78,7 @@ export function metodoPuntoMedio(f, y0, t0, tFinal, h) {
 
     const k1 = f(t, y);
 
-    const k2 = f(
-      t + hPaso / 2,
-      y + (hPaso / 2) * k1
-    );
+    const k2 = f(t + hPaso / 2, y + (hPaso / 2) * k1);
 
     y = y + hPaso * k2;
     t = ultimo ? tFinal : t + hPaso;

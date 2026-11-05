@@ -5,81 +5,75 @@ const fetchOriginal = globalThis.fetch;
 const consoleLogOriginal = console.log;
 
 function restaurarGlobales() {
-    globalThis.fetch = fetchOriginal;
-    console.log = consoleLogOriginal;
+  globalThis.fetch = fetchOriginal;
+  console.log = consoleLogOriginal;
 }
 
 afterEach(() => {
-    restaurarGlobales();
-    jest.clearAllTimers();
-    jest.useRealTimers();
+  restaurarGlobales();
+  jest.clearAllTimers();
+  jest.useRealTimers();
 });
 
 describe('verificarVersion', () => {
-    test('imprime un mensaje cuando el CLI está actualizado', async () => {
-        globalThis.fetch = jest.fn().mockResolvedValue({
-            ok: true,
-            json: async () => ({ version: '1.0.0' }),
-        });
-
-        console.log = jest.fn();
-
-        await verificarVersion();
-
-        expect(console.log).toHaveBeenCalledWith(
-            'El CLI está actualizado.'
-        );
+  test('imprime un mensaje cuando el CLI está actualizado', async () => {
+    globalThis.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ version: '1.0.0' }),
     });
 
-    test('imprime un mensaje cuando existe una nueva versión', async () => {
-        globalThis.fetch = jest.fn().mockResolvedValue({
-            ok: true,
-            json: async () => ({ version: '2.0.0' }),
-        });
+    console.log = jest.fn();
 
-        console.log = jest.fn();
+    await verificarVersion();
 
-        await verificarVersion();
+    expect(console.log).toHaveBeenCalledWith('El CLI está actualizado.');
+  });
 
-        expect(console.log).toHaveBeenCalledWith(
-            'Hay una nueva versión disponible: 2.0.0'
-        );
+  test('imprime un mensaje cuando existe una nueva versión', async () => {
+    globalThis.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ version: '2.0.0' }),
     });
 
-    test('no imprime nada cuando la respuesta no es correcta', async () => {
-        globalThis.fetch = jest.fn().mockResolvedValue({
-            ok: false,
-            json: async () => ({ version: '2.0.0' }),
-        });
+    console.log = jest.fn();
 
-        console.log = jest.fn();
+    await verificarVersion();
 
-        await verificarVersion();
+    expect(console.log).toHaveBeenCalledWith('Hay una nueva versión disponible: 2.0.0');
+  });
 
-        expect(console.log).not.toHaveBeenCalled();
+  test('no imprime nada cuando la respuesta no es correcta', async () => {
+    globalThis.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({ version: '2.0.0' }),
     });
 
-    test('no lanza una excepción cuando fetch rechaza la promesa', async () => {
-        jest.useFakeTimers();
+    console.log = jest.fn();
 
-        globalThis.fetch = jest.fn().mockRejectedValue(
-            new Error('Error de conexión')
-        );
+    await verificarVersion();
 
-        console.log = jest.fn();
+    expect(console.log).not.toHaveBeenCalled();
+  });
 
-        await expect(verificarVersion()).resolves.toBeUndefined();
+  test('no lanza una excepción cuando fetch rechaza la promesa', async () => {
+    jest.useFakeTimers();
 
-        expect(console.log).not.toHaveBeenCalled();
-    });
+    globalThis.fetch = jest.fn().mockRejectedValue(new Error('Error de conexión'));
 
-    test('restaura fetch y console.log', () => {
-        globalThis.fetch = jest.fn();
-        console.log = jest.fn();
+    console.log = jest.fn();
 
-        restaurarGlobales();
+    await expect(verificarVersion()).resolves.toBeUndefined();
 
-        expect(globalThis.fetch).toBe(fetchOriginal);
-        expect(console.log).toBe(consoleLogOriginal);
-    });
+    expect(console.log).not.toHaveBeenCalled();
+  });
+
+  test('restaura fetch y console.log', () => {
+    globalThis.fetch = jest.fn();
+    console.log = jest.fn();
+
+    restaurarGlobales();
+
+    expect(globalThis.fetch).toBe(fetchOriginal);
+    expect(console.log).toBe(consoleLogOriginal);
+  });
 });

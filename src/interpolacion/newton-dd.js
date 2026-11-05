@@ -1,6 +1,6 @@
-import { crearResultado } from "../core/contrato.js";
-import { ErrorParametros } from "../core/errores.js";
-import { validarNumero } from "../utils/validaciones.js";
+import { crearResultado } from '../core/contrato.js';
+import { ErrorParametros } from '../core/errores.js';
+import { validarNumero } from '../utils/validaciones.js';
 
 /**
  * Interpolación de Newton mediante diferencias divididas.
@@ -11,19 +11,17 @@ import { validarNumero } from "../utils/validaciones.js";
  * @throws {ErrorParametros} Si puntos no es válido o hay x's repetidos.
  */
 function newtonDD({ puntos, x }) {
-  // Validaciones 
+  // Validaciones
 
   if (!Array.isArray(puntos) || puntos.length < 2) {
     throw new ErrorParametros(
-      "ChuspaNumeric.newtonDD: 'puntos' debe ser un array con al menos dos pares [xi, yi]."
+      "ChuspaNumeric.newtonDD: 'puntos' debe ser un array con al menos dos pares [xi, yi].",
     );
   }
 
   for (let i = 0; i < puntos.length; i++) {
     if (!Array.isArray(puntos[i]) || puntos[i].length < 2) {
-      throw new ErrorParametros(
-        `ChuspaNumeric.newtonDD: puntos[${i}] debe ser un par [xi, yi].`
-      );
+      throw new ErrorParametros(`ChuspaNumeric.newtonDD: puntos[${i}] debe ser un par [xi, yi].`);
     }
   }
 
@@ -33,13 +31,13 @@ function newtonDD({ puntos, x }) {
   const xsUnicos = new Set(xs);
   if (xsUnicos.size !== xs.length) {
     throw new ErrorParametros(
-      "ChuspaNumeric.newtonDD: existen dos o más puntos con el mismo valor de x. Los x deben ser únicos."
+      'ChuspaNumeric.newtonDD: existen dos o más puntos con el mismo valor de x. Los x deben ser únicos.',
     );
   }
 
-  validarNumero(x, "x");
+  validarNumero(x, 'x');
 
-  // Construir tabla de diferencias divididas 
+  // Construir tabla de diferencias divididas
 
   const n = puntos.length;
   const tabla = [ys.slice()]; // nivel 0: los valores yi originales
@@ -50,9 +48,7 @@ function newtonDD({ puntos, x }) {
     const actual = [];
 
     for (let i = 0; i < anterior.length - 1; i++) {
-      actual.push(
-        (anterior[i + 1] - anterior[i]) / (xs[i + nivel] - xs[i])
-      );
+      actual.push((anterior[i + 1] - anterior[i]) / (xs[i + nivel] - xs[i]));
     }
 
     tabla.push(actual);
@@ -62,13 +58,13 @@ function newtonDD({ puntos, x }) {
   // Los coeficientes de Newton son el primer elemento de cada nivel
   const coeficientes = tabla.map((nivel) => nivel[0]);
 
-  // Evaluar el polinomio en x (forma de Newton) 
+  // Evaluar el polinomio en x (forma de Newton)
 
   let resultado = coeficientes[0];
   let productorio = 1;
 
   for (let i = 1; i < n; i++) {
-    productorio *= (x - xs[i - 1]);
+    productorio *= x - xs[i - 1];
     resultado += coeficientes[i] * productorio;
   }
 
@@ -78,7 +74,7 @@ function newtonDD({ puntos, x }) {
     convergio: true,
     mensaje: `Polinomio de Newton evaluado en x = ${x}.`,
     meta: {
-      metodo: "newtonDD",
+      metodo: 'newtonDD',
       parametros: { puntos, x, coeficientes },
       tiempo_ms: 0,
     },

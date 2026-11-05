@@ -11,7 +11,9 @@ function validarMatriz(matriz, nombre = 'matriz') {
   for (let i = 0; i < matriz.length; i++) {
     if (!Array.isArray(matriz[i])) throw new Error(`${nombre}[${i}] no es un array`);
     if (matriz[i].length !== numColumnas) {
-      throw new Error(`${nombre} no es rectangular: fila 0 tiene ${numColumnas} columnas, pero fila ${i} tiene ${matriz[i].length} columnas`);
+      throw new Error(
+        `${nombre} no es rectangular: fila 0 tiene ${numColumnas} columnas, pero fila ${i} tiene ${matriz[i].length} columnas`,
+      );
     }
     for (let j = 0; j < matriz[i].length; j++) {
       if (typeof matriz[i][j] !== 'number' || !isFinite(matriz[i][j])) {
@@ -31,7 +33,9 @@ export function sumaMatrices(A, B) {
   const [filasA, colsA] = dimensiones(A);
   const [filasB, colsB] = dimensiones(B);
   if (filasA !== filasB || colsA !== colsB) {
-    throw new Error(`Dimensiones incompatibles para suma: A es ${filasA}x${colsA}, B es ${filasB}x${colsB}. Ambas deben ser del mismo tamaño.`);
+    throw new Error(
+      `Dimensiones incompatibles para suma: A es ${filasA}x${colsA}, B es ${filasB}x${colsB}. Ambas deben ser del mismo tamaño.`,
+    );
   }
   const resultado = [];
   for (let i = 0; i < filasA; i++) {
@@ -48,7 +52,9 @@ export function restaMatrices(A, B) {
   const [filasA, colsA] = dimensiones(A);
   const [filasB, colsB] = dimensiones(B);
   if (filasA !== filasB || colsA !== colsB) {
-    throw new Error(`Dimensiones incompatibles para resta: A es ${filasA}x${colsA}, B es ${filasB}x${colsB}. Ambas deben ser del mismo tamaño.`);
+    throw new Error(
+      `Dimensiones incompatibles para resta: A es ${filasA}x${colsA}, B es ${filasB}x${colsB}. Ambas deben ser del mismo tamaño.`,
+    );
   }
   const resultado = [];
   for (let i = 0; i < filasA; i++) {
@@ -65,7 +71,9 @@ export function multiplicarMatrices(A, B) {
   const [filasA, colsA] = dimensiones(A);
   const [filasB, colsB] = dimensiones(B);
   if (colsA !== filasB) {
-    throw new Error(`Dimensiones incompatibles para multiplicación: A es ${filasA}x${colsA}, B es ${filasB}x${colsB}. Las columnas de A (${colsA}) deben igualar las filas de B (${filasB}).`);
+    throw new Error(
+      `Dimensiones incompatibles para multiplicación: A es ${filasA}x${colsA}, B es ${filasB}x${colsB}. Las columnas de A (${colsA}) deben igualar las filas de B (${filasB}).`,
+    );
   }
   const resultado = [];
   for (let i = 0; i < filasA; i++) {

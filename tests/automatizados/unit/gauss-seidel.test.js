@@ -10,7 +10,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -32,7 +32,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
         [4, 1, 1, 1],
         [1, 4, 1, 1],
         [1, 1, 4, 1],
-        [1, 1, 1, 4]
+        [1, 1, 1, 4],
       ];
       const b = [7, 7, 7, 7];
 
@@ -49,7 +49,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
       const x0 = [0, 0, 0];
@@ -66,7 +66,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -84,7 +84,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -104,7 +104,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -120,7 +120,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -132,13 +132,13 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
 
       // El resultado con más iteraciones debe estar más cerca de la solución exacta
       const solucionExacta = [1, 2, 3];
-      
+
       const error1 = Math.sqrt(
-        res1.resultado.reduce((acc, val, i) => acc + (val - solucionExacta[i]) ** 2, 0)
+        res1.resultado.reduce((acc, val, i) => acc + (val - solucionExacta[i]) ** 2, 0),
       );
-      
+
       const error2 = Math.sqrt(
-        res2.resultado.reduce((acc, val, i) => acc + (val - solucionExacta[i]) ** 2, 0)
+        res2.resultado.reduce((acc, val, i) => acc + (val - solucionExacta[i]) ** 2, 0),
       );
 
       expect(error2).toBeLessThan(error1);
@@ -150,7 +150,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [0, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -161,7 +161,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 0, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -172,7 +172,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 0]
+        [1, 1, 0],
       ];
       const b = [9, 14, 15];
 
@@ -183,7 +183,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 0, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -194,7 +194,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [0, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -207,14 +207,14 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
       const res = gaussSeidel({ A, b });
 
       expect(res.iteraciones.length).toBeGreaterThan(0);
-      
+
       res.iteraciones.forEach((iter) => {
         expect(iter).toHaveProperty('n');
         expect(iter).toHaveProperty('x');
@@ -228,7 +228,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -243,7 +243,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -260,7 +260,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 
@@ -273,7 +273,7 @@ describe('gauss-seidel - método iterativo para sistemas lineales', () => {
       const A = [
         [4, 1, 1],
         [1, 5, 1],
-        [1, 1, 4]
+        [1, 1, 4],
       ];
       const b = [9, 14, 15];
 

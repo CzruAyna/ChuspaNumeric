@@ -30,10 +30,10 @@ describe('simpson13 y simpson38 - reglas de Simpson', () => {
       const f = (x) => x * x;
 
       expect(() => simpson13({ f, a: 0, b: 1, n: 3 })).toThrow(
-        'n debe ser un entero positivo y par'
+        'n debe ser un entero positivo y par',
       );
       expect(() => simpson13({ f, a: 0, b: 1, n: 5 })).toThrow(
-        'n debe ser un entero positivo y par'
+        'n debe ser un entero positivo y par',
       );
     });
 
@@ -41,22 +41,18 @@ describe('simpson13 y simpson38 - reglas de Simpson', () => {
       const f = (x) => x * x;
 
       expect(() => simpson13({ f, a: 0, b: 1, n: 0 })).toThrow(
-        'n debe ser un entero positivo y par'
+        'n debe ser un entero positivo y par',
       );
       expect(() => simpson13({ f, a: 0, b: 1, n: -2 })).toThrow(
-        'n debe ser un entero positivo y par'
+        'n debe ser un entero positivo y par',
       );
     });
 
     test('intervalo inválido lanza error', () => {
       const f = (x) => x * x;
 
-      expect(() => simpson13({ f, a: 1, b: 1, n: 2 })).toThrow(
-        'Intervalo inválido'
-      );
-      expect(() => simpson13({ f, a: 2, b: 1, n: 2 })).toThrow(
-        'Intervalo inválido'
-      );
+      expect(() => simpson13({ f, a: 1, b: 1, n: 2 })).toThrow('Intervalo inválido');
+      expect(() => simpson13({ f, a: 2, b: 1, n: 2 })).toThrow('Intervalo inválido');
     });
   });
 
@@ -86,16 +82,16 @@ describe('simpson13 y simpson38 - reglas de Simpson', () => {
       const f = (x) => x * x;
 
       expect(() => simpson38({ f, a: 0, b: 1, n: 2 })).toThrow(
-        "ChuspaNumeric: 'n' debe ser múltiplo de 3"
+        "ChuspaNumeric: 'n' debe ser múltiplo de 3",
       );
       expect(() => simpson38({ f, a: 0, b: 1, n: 4 })).toThrow(
-        "ChuspaNumeric: 'n' debe ser múltiplo de 3"
+        "ChuspaNumeric: 'n' debe ser múltiplo de 3",
       );
       expect(() => simpson38({ f, a: 0, b: 1, n: 5 })).toThrow(
-        "ChuspaNumeric: 'n' debe ser múltiplo de 3"
+        "ChuspaNumeric: 'n' debe ser múltiplo de 3",
       );
       expect(() => simpson38({ f, a: 0, b: 1, n: 10 })).toThrow(
-        "ChuspaNumeric: 'n' debe ser múltiplo de 3"
+        "ChuspaNumeric: 'n' debe ser múltiplo de 3",
       );
     });
 
@@ -103,10 +99,10 @@ describe('simpson13 y simpson38 - reglas de Simpson', () => {
       const f = (x) => x * x;
 
       expect(() => simpson38({ f, a: 0, b: 1, n: 0 })).toThrow(
-        "ChuspaNumeric: 'n' debe ser un entero positivo"
+        "ChuspaNumeric: 'n' debe ser un entero positivo",
       );
       expect(() => simpson38({ f, a: 0, b: 1, n: -3 })).toThrow(
-        "ChuspaNumeric: 'n' debe ser un entero positivo"
+        "ChuspaNumeric: 'n' debe ser un entero positivo",
       );
     });
 

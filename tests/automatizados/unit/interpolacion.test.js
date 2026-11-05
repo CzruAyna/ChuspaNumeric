@@ -6,7 +6,7 @@ describe('Interpolación de Lagrange', () => {
     const puntos = [
       [0, 1],
       [1, 3],
-      [2, 5]
+      [2, 5],
     ];
 
     const res = lagrange({ puntos, x: 1 });
@@ -19,7 +19,7 @@ describe('Interpolación de Lagrange', () => {
     const puntos = [
       [0, 0],
       [1, 1],
-      [2, 4]
+      [2, 4],
     ];
 
     const res = lagrange({ puntos, x: 3 });
@@ -31,8 +31,8 @@ describe('Interpolación de Lagrange', () => {
     expect(() =>
       lagrange({
         puntos: [[0, 1]],
-        x: 0
-      })
+        x: 0,
+      }),
     ).toThrow();
   });
 });
@@ -42,7 +42,7 @@ describe('Interpolación de Newton DD', () => {
     const puntos = [
       [0, 1],
       [1, 3],
-      [2, 5]
+      [2, 5],
     ];
 
     const res = newtonDD({ puntos, x: 2 });
@@ -55,7 +55,7 @@ describe('Interpolación de Newton DD', () => {
     const puntos = [
       [0, 0],
       [1, 1],
-      [2, 4]
+      [2, 4],
     ];
 
     const res = newtonDD({ puntos, x: 3 });
@@ -68,10 +68,10 @@ describe('Interpolación de Newton DD', () => {
       newtonDD({
         puntos: [
           [1, 2],
-          [1, 3]
+          [1, 3],
         ],
-        x: 1
-      })
+        x: 1,
+      }),
     ).toThrow();
   });
 });

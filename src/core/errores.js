@@ -5,7 +5,7 @@
 export class ErrorParametros extends Error {
   constructor(mensaje) {
     super(mensaje);
-    this.name = "ErrorParametros";
+    this.name = 'ErrorParametros';
   }
 }
 
@@ -16,7 +16,7 @@ export class ErrorParametros extends Error {
 export class ErrorConvergencia extends Error {
   constructor(mensaje) {
     super(mensaje);
-    this.name = "ErrorConvergencia";
+    this.name = 'ErrorConvergencia';
   }
 }
 
@@ -27,7 +27,7 @@ export class ErrorConvergencia extends Error {
 export class ErrorDominio extends Error {
   constructor(mensaje) {
     super(mensaje);
-    this.name = "ErrorDominio";
+    this.name = 'ErrorDominio';
   }
 }
 
@@ -38,7 +38,7 @@ export class ErrorDominio extends Error {
 export class ErrorTamano extends Error {
   constructor(mensaje) {
     super(mensaje);
-    this.name = "ErrorTamano";
+    this.name = 'ErrorTamano';
   }
 }
 
@@ -49,23 +49,23 @@ export class ErrorTamano extends Error {
 export class ErrorTimeout extends Error {
   constructor(mensaje) {
     super(mensaje);
-    this.name = "ErrorTimeout";
+    this.name = 'ErrorTimeout';
   }
 }
 
 /**
  * Error cuando un método iterativo produce valores NaN o Infinity,
  * indicando divergencia numérica durante la ejecución.
- * 
+ *
  * A diferencia de ErrorConvergencia (que indica que se agotaron las iteraciones
  * sin alcanzar la tolerancia), ErrorDivergencia señala que los valores se volvieron
  * no numéricos, lo cual indica que el método no converge para los parámetros dados.
- * 
+ *
  * @example throw new ErrorDivergencia("Newton-Raphson divergió: x se volvió NaN en la iteración 5.");
  */
 export class ErrorDivergencia extends Error {
   constructor(mensaje) {
     super(mensaje);
-    this.name = "ErrorDivergencia";
+    this.name = 'ErrorDivergencia';
   }
 }

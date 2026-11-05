@@ -8,7 +8,7 @@ describe('biseccion - casos de borde', () => {
       f,
       a: 0,
       b: 3,
-      tolerancia: 1e-6
+      tolerancia: 1e-6,
     });
 
     expect(res.convergio).toBe(true);
@@ -22,8 +22,8 @@ describe('biseccion - casos de borde', () => {
       biseccion({
         f,
         a: 0,
-        b: 3
-      })
+        b: 3,
+      }),
     ).toThrow();
   });
 
@@ -34,7 +34,7 @@ describe('biseccion - casos de borde', () => {
       f,
       a: 0,
       b: 3,
-      tolerancia: 1e-10
+      tolerancia: 1e-10,
     });
 
     expect(res.resultado).toBeCloseTo(2, 9);
@@ -46,7 +46,7 @@ describe('biseccion - casos de borde', () => {
     const res = biseccion({
       f,
       a: 0,
-      b: 3
+      b: 3,
     });
 
     const iteracion = res.iteraciones[0];

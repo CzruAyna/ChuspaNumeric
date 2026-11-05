@@ -1,14 +1,14 @@
 // METODO DE NEWTON-RAPHSON
 
-import { crearResultado, medirTiempo } from "../core/contrato.js";
-import { ErrorDominio, ErrorParametros, ErrorTimeout } from "../core/errores.js";
+import { crearResultado, medirTiempo } from '../core/contrato.js';
+import { ErrorDominio, ErrorParametros, ErrorTimeout } from '../core/errores.js';
 import {
   validarFuncion,
   validarNumero,
   validarTolerancia,
   validarIteraciones,
   verificarDivergencia,
-} from "../utils/validaciones.js";
+} from '../utils/validaciones.js';
 
 /**
  * Encuentra una raíz mediante el método de Newton-Raphson.
@@ -24,24 +24,17 @@ import {
  * @throws {ErrorTimeout} Si se excede el tiempo máximo de ejecución configurado.
  * @throws {ErrorDivergencia} Si los valores se vuelven NaN o Infinity durante la iteración.
  */
-function newtonRaphson({
-  f,
-  df,
-  x0,
-  tolerancia = 1e-6,
-  maxIter = 100,
-  timeoutMs = null,
-}) {
-  validarFuncion(f, "f");
-  validarFuncion(df, "df");
-  validarNumero(x0, "x0");
+function newtonRaphson({ f, df, x0, tolerancia = 1e-6, maxIter = 100, timeoutMs = null }) {
+  validarFuncion(f, 'f');
+  validarFuncion(df, 'df');
+  validarNumero(x0, 'x0');
   validarTolerancia(tolerancia);
   validarIteraciones(maxIter);
 
   if (timeoutMs !== null) {
-    if (typeof timeoutMs !== "number" || !isFinite(timeoutMs) || timeoutMs <= 0) {
+    if (typeof timeoutMs !== 'number' || !isFinite(timeoutMs) || timeoutMs <= 0) {
       throw new ErrorParametros(
-        `ChuspaNumeric.newtonRaphson: 'timeoutMs' debe ser un número finito mayor a cero o null. Se recibió: ${timeoutMs}.`
+        `ChuspaNumeric.newtonRaphson: 'timeoutMs' debe ser un número finito mayor a cero o null. Se recibió: ${timeoutMs}.`,
       );
     }
   }
@@ -58,7 +51,7 @@ function newtonRaphson({
       if (timeoutMs !== null && (n - 1) % INTERVALO_VERIFICACION === 0) {
         if (performance.now() - inicio > timeoutMs) {
           throw new ErrorTimeout(
-            `ChuspaNumeric.newtonRaphson: excedió el timeout de ${timeoutMs}ms después de ${n - 1} iteraciones.`
+            `ChuspaNumeric.newtonRaphson: excedió el timeout de ${timeoutMs}ms después de ${n - 1} iteraciones.`,
           );
         }
       }
@@ -67,15 +60,13 @@ function newtonRaphson({
       const dfx = df(x);
 
       if (dfx === 0) {
-        throw new ErrorDominio(
-          `ChuspaNumeric.newtonRaphson: la derivada es cero en x = ${x}.`
-        );
+        throw new ErrorDominio(`ChuspaNumeric.newtonRaphson: la derivada es cero en x = ${x}.`);
       }
 
       const siguiente = x - fx / dfx;
 
       // Verificar divergencia numérica inmediatamente después del cálculo
-      verificarDivergencia(siguiente, "newtonRaphson", n);
+      verificarDivergencia(siguiente, 'newtonRaphson', n);
 
       const error = Math.abs(siguiente - x);
 
@@ -108,10 +99,10 @@ function newtonRaphson({
     iteraciones: valor.iteraciones,
     convergio: valor.convergio,
     mensaje: valor.convergio
-      ? "Método convergió correctamente."
-      : "Se alcanzó el máximo de iteraciones sin converger.",
+      ? 'Método convergió correctamente.'
+      : 'Se alcanzó el máximo de iteraciones sin converger.',
     meta: {
-      metodo: "newton-raphson",
+      metodo: 'newton-raphson',
       parametros: {
         x0,
         tolerancia,

@@ -24,9 +24,7 @@ describe('exportarCSV', () => {
   });
 
   test('redondea los valores numéricos según la precisión indicada', () => {
-    const tabla = [
-      { x: 1.23456789, y: 2.98765432 },
-    ];
+    const tabla = [{ x: 1.23456789, y: 2.98765432 }];
 
     const resultado = exportarCSV(tabla, { precision: 2 });
 
@@ -46,9 +44,7 @@ describe('exportarCSV', () => {
   });
 
   test('maneja valores null y undefined como campos vacíos', () => {
-    const tabla = [
-      { x: null, y: undefined },
-    ];
+    const tabla = [{ x: null, y: undefined }];
 
     const resultado = exportarCSV(tabla);
 
@@ -56,9 +52,7 @@ describe('exportarCSV', () => {
   });
 
   test('escapa correctamente un valor que contiene el separador', () => {
-    const tabla = [
-      { nombre: 'Juan, Pérez', edad: 20 },
-    ];
+    const tabla = [{ nombre: 'Juan, Pérez', edad: 20 }];
 
     const resultado = exportarCSV(tabla);
 

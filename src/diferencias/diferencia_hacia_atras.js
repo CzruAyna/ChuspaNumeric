@@ -7,9 +7,9 @@
  * @throws {Error} Si el tamaño del paso h es igual a cero.
  */
 export function diferenciasAtrasGrado1(f, x, h) {
-    if (h === 0) {
-        throw new Error("El tamaño del paso h no puede ser cero.");
-    }
-    
-    return (f(x) - f(x - h)) / h;
+  if (h === 0) {
+    throw new Error('El tamaño del paso h no puede ser cero.');
+  }
+
+  return (f(x) - f(x - h)) / h;
 }

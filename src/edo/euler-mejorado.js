@@ -23,31 +23,31 @@ function eulerMejorado({ f, x0, y0, h, xFinal }) {
   validarNumero(xFinal, 'xFinal');
   if (h <= 0) {
     throw new ErrorParametros(
-      `ChuspaNumeric.eulerMejorado: 'h' debe ser mayor a cero. Se recibió: ${h}.`
+      `ChuspaNumeric.eulerMejorado: 'h' debe ser mayor a cero. Se recibió: ${h}.`,
     );
   }
   if (xFinal <= x0) {
     throw new ErrorParametros(
-      `ChuspaNumeric.eulerMejorado: 'xFinal' (${xFinal}) debe ser mayor que 'x0' (${x0}).`
+      `ChuspaNumeric.eulerMejorado: 'xFinal' (${xFinal}) debe ser mayor que 'x0' (${x0}).`,
     );
   }
   // ── Cálculo ─────────────────────────────────────────────────
   const iteraciones = [];
-  
+
   // Extraemos tanto el resultado del cálculo como el tiempo medido
   const { valor: puntos, tiempo_ms } = medirTiempo(() => {
     const listaPuntos = [[x0, y0]];
     let y = y0;
-    
+
     // Determinar la cantidad exacta de pasos para evitar imprecisiones de coma flotante
     const pasos = Math.round((xFinal - x0) / h);
     for (let n = 1; n <= pasos; n++) {
       // x actual corresponde al inicio del paso
       const xActual = x0 + (n - 1) * h;
-      
+
       const k1 = f(xActual, y);
       const yEstrella = y + h * k1;
-      
+
       // x Siguiente corresponde al final del paso
       const xSiguiente = x0 + n * h;
       const k2 = f(xSiguiente, yEstrella);

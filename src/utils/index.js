@@ -4,12 +4,7 @@
  * Re-exporta funciones de estadística descriptiva (issue #659)
  * y generadores de matrices de prueba (issue #651).
  */
-export {
-  media,
-  varianza,
-  desviacionEstandar,
-  mediana
-} from './estadistica.js';
+export { media, varianza, desviacionEstandar, mediana } from './estadistica.js';
 
 export {
   matrizIdentidad,

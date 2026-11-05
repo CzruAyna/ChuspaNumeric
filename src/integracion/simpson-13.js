@@ -9,16 +9,16 @@
  * @returns {Object} Resultado del metodo.
  */
 function simpson13({ f, a, b, n = 100 }) {
-  if (typeof f !== "function") {
-    throw new TypeError("f debe ser una función.");
+  if (typeof f !== 'function') {
+    throw new TypeError('f debe ser una función.');
   }
 
-  if (typeof a !== "number" || typeof b !== "number" || a >= b) {
-    throw new Error("Intervalo inválido.");
+  if (typeof a !== 'number' || typeof b !== 'number' || a >= b) {
+    throw new Error('Intervalo inválido.');
   }
 
   if (!Number.isInteger(n) || n <= 0 || n % 2 !== 0) {
-    throw new Error("n debe ser un entero positivo y par.");
+    throw new Error('n debe ser un entero positivo y par.');
   }
 
   const h = (b - a) / n;
@@ -54,7 +54,7 @@ function simpson13({ f, a, b, n = 100 }) {
   const resultado = (h / 3) * suma;
 
   return {
-    metodo: "Regla de Simpson 1/3",
+    metodo: 'Regla de Simpson 1/3',
     resultado,
     iteraciones,
   };

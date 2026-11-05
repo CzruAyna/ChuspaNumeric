@@ -18,7 +18,7 @@ function validarDatos(datos) {
   if (datos.length === 0) {
     throw new Error('El array de datos no puede estar vacío');
   }
-  if (!datos.every(d => typeof d === 'number' && !isNaN(d) && isFinite(d))) {
+  if (!datos.every((d) => typeof d === 'number' && !isNaN(d) && isFinite(d))) {
     throw new Error('Todos los elementos deben ser números finitos');
   }
 }

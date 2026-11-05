@@ -19,34 +19,34 @@ function regresionLineal(xs, ys) {
 
   if (xs.length < 2) {
     throw new Error(
-      `ChuspaNumeric.regresionLineal: se necesitan al menos 2 puntos. Se recibió: ${xs.length}.`
+      `ChuspaNumeric.regresionLineal: se necesitan al menos 2 puntos. Se recibió: ${xs.length}.`,
     );
   }
 
   if (xs.length !== ys.length) {
     throw new Error(
       `ChuspaNumeric.regresionLineal: xs e ys deben tener la misma longitud. ` +
-      `xs.length=${xs.length}, ys.length=${ys.length}.`
+        `xs.length=${xs.length}, ys.length=${ys.length}.`,
     );
   }
 
   const n = xs.length;
 
   // Sumas necesarias para las fórmulas de mínimos cuadrados
-  const sumaX  = xs.reduce((a, x) => a + x, 0);
-  const sumaY  = ys.reduce((a, y) => a + y, 0);
+  const sumaX = xs.reduce((a, x) => a + x, 0);
+  const sumaY = ys.reduce((a, y) => a + y, 0);
   const sumaXY = xs.reduce((a, x, i) => a + x * ys[i], 0);
   const sumaX2 = xs.reduce((a, x) => a + x * x, 0);
 
   // Pendiente e intercepto
-  const pendiente   = (n * sumaXY - sumaX * sumaY) / (n * sumaX2 - sumaX * sumaX);
-  const intercepto  = (sumaY - pendiente * sumaX) / n;
+  const pendiente = (n * sumaXY - sumaX * sumaY) / (n * sumaX2 - sumaX * sumaX);
+  const intercepto = (sumaY - pendiente * sumaX) / n;
 
   // Coeficiente de determinación r²
-  const mediaY   = sumaY / n;
-  const ssTot    = ys.reduce((a, y) => a + (y - mediaY) ** 2, 0);
-  const ssRes    = ys.reduce((a, y, i) => a + (y - (pendiente * xs[i] + intercepto)) ** 2, 0);
-  const r2       = ssTot === 0 ? 1 : 1 - ssRes / ssTot;
+  const mediaY = sumaY / n;
+  const ssTot = ys.reduce((a, y) => a + (y - mediaY) ** 2, 0);
+  const ssRes = ys.reduce((a, y, i) => a + (y - (pendiente * xs[i] + intercepto)) ** 2, 0);
+  const r2 = ssTot === 0 ? 1 : 1 - ssRes / ssTot;
 
   // Función de predicción
   const prediccion = (x) => pendiente * x + intercepto;
@@ -79,21 +79,19 @@ function regresionPolinomial(xs, ys, grado) {
 
   if (!Number.isInteger(grado) || grado < 1) {
     throw new Error(
-      `ChuspaNumeric.regresionPolinomial: 'grado' debe ser un entero >= 1. Se recibió: ${grado}.`
+      `ChuspaNumeric.regresionPolinomial: 'grado' debe ser un entero >= 1. Se recibió: ${grado}.`,
     );
   }
 
   if (xs.length < grado + 1) {
     throw new Error(
       `ChuspaNumeric.regresionPolinomial: se necesitan al menos ${grado + 1} puntos para grado ${grado}. ` +
-      `Se recibió: ${xs.length}.`
+        `Se recibió: ${xs.length}.`,
     );
   }
 
   if (xs.length !== ys.length) {
-    throw new Error(
-      `ChuspaNumeric.regresionPolinomial: xs e ys deben tener la misma longitud.`
-    );
+    throw new Error(`ChuspaNumeric.regresionPolinomial: xs e ys deben tener la misma longitud.`);
   }
 
   const n = xs.length;
@@ -120,14 +118,13 @@ function regresionPolinomial(xs, ys, grado) {
   const coeficientes = _resolverSistema(XtX, Xty);
 
   // Función de predicción
-  const prediccion = (x) =>
-    coeficientes.reduce((suma, a, p) => suma + a * Math.pow(x, p), 0);
+  const prediccion = (x) => coeficientes.reduce((suma, a, p) => suma + a * Math.pow(x, p), 0);
 
   // Coeficiente de determinación r²
   const mediaY = ys.reduce((a, y) => a + y, 0) / n;
-  const ssTot  = ys.reduce((a, y) => a + (y - mediaY) ** 2, 0);
-  const ssRes  = ys.reduce((a, y, i) => a + (y - prediccion(xs[i])) ** 2, 0);
-  const r2     = ssTot === 0 ? 1 : 1 - ssRes / ssTot;
+  const ssTot = ys.reduce((a, y) => a + (y - mediaY) ** 2, 0);
+  const ssRes = ys.reduce((a, y, i) => a + (y - prediccion(xs[i])) ** 2, 0);
+  const r2 = ssTot === 0 ? 1 : 1 - ssRes / ssTot;
 
   return { coeficientes, r2, prediccion };
 }

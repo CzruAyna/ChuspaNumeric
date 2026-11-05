@@ -28,14 +28,14 @@ import { ErrorParametros } from '../core/errores.js';
  * @type {Record<string, number>}
  */
 const LONGITUD_A_METROS = {
-  m:    1,
-  km:   1000,
-  cm:   0.01,
-  mm:   0.001,
-  ft:   0.3048,
-  in:   0.0254,
-  yd:   0.9144,
-  mi:   1609.344,
+  m: 1,
+  km: 1000,
+  cm: 0.01,
+  mm: 0.001,
+  ft: 0.3048,
+  in: 0.0254,
+  yd: 0.9144,
+  mi: 1609.344,
 };
 
 /**
@@ -43,12 +43,12 @@ const LONGITUD_A_METROS = {
  * @type {Record<string, number>}
  */
 const PRESION_A_PA = {
-  Pa:   1,
-  kPa:  1000,
-  MPa:  1e6,
-  bar:  1e5,
-  atm:  101325,
-  psi:  6894.757293168,
+  Pa: 1,
+  kPa: 1000,
+  MPa: 1e6,
+  bar: 1e5,
+  atm: 101325,
+  psi: 6894.757293168,
   mmHg: 133.322387415,
   torr: 133.322387415,
 };
@@ -58,14 +58,14 @@ const PRESION_A_PA = {
  * @type {Record<string, number>}
  */
 const ENERGIA_A_J = {
-  J:   1,
-  kJ:  1000,
-  MJ:  1e6,
+  J: 1,
+  kJ: 1000,
+  MJ: 1e6,
   cal: 4.184,
   kcal: 4184,
   kWh: 3.6e6,
-  Wh:  3600,
-  eV:  1.602176634e-19,
+  Wh: 3600,
+  eV: 1.602176634e-19,
   BTU: 1055.05585262,
 };
 
@@ -127,13 +127,13 @@ export function convertirTemperatura(valor, desde, hasta) {
   if (!escalas.includes(desde)) {
     throw new ErrorParametros(
       `ChuspaNumeric.convertirTemperatura: unidad de origen "${desde}" no soportada. ` +
-      `Escalas disponibles: ${escalas.join(', ')}.`
+        `Escalas disponibles: ${escalas.join(', ')}.`,
     );
   }
   if (!escalas.includes(hasta)) {
     throw new ErrorParametros(
       `ChuspaNumeric.convertirTemperatura: unidad de destino "${hasta}" no soportada. ` +
-      `Escalas disponibles: ${escalas.join(', ')}.`
+        `Escalas disponibles: ${escalas.join(', ')}.`,
     );
   }
 
@@ -153,7 +153,7 @@ export function convertirTemperatura(valor, desde, hasta) {
   if (celsius < CERO_ABSOLUTO_C - 1e-9) {
     throw new ErrorParametros(
       `ChuspaNumeric.convertirTemperatura: el valor ${valor} ${desde} corresponde a ` +
-      `${celsius.toFixed(4)} °C, que está por debajo del cero absoluto (-273.15 °C).`
+        `${celsius.toFixed(4)} °C, que está por debajo del cero absoluto (-273.15 °C).`,
     );
   }
 
@@ -227,10 +227,10 @@ export function convertirEnergia(valor, desde, hasta) {
  */
 export function unidadesDisponibles() {
   return {
-    longitud:     Object.keys(LONGITUD_A_METROS),
-    temperatura:  ['C', 'F', 'K'],
-    presion:      Object.keys(PRESION_A_PA),
-    energia:      Object.keys(ENERGIA_A_J),
+    longitud: Object.keys(LONGITUD_A_METROS),
+    temperatura: ['C', 'F', 'K'],
+    presion: Object.keys(PRESION_A_PA),
+    energia: Object.keys(ENERGIA_A_J),
   };
 }
 
@@ -247,7 +247,7 @@ function _validarValor(valor, nombreFuncion) {
   if (typeof valor !== 'number' || !isFinite(valor)) {
     throw new ErrorParametros(
       `ChuspaNumeric.${nombreFuncion}: el valor debe ser un número finito. ` +
-      `Se recibió: ${valor} (${typeof valor}).`
+        `Se recibió: ${valor} (${typeof valor}).`,
     );
   }
 }
@@ -263,7 +263,7 @@ function _validarUnidad(unidad, tabla, nombreFuncion, categoria) {
   if (!(unidad in tabla)) {
     throw new ErrorParametros(
       `ChuspaNumeric.${nombreFuncion}: unidad "${unidad}" no soportada para ${categoria}. ` +
-      `Unidades disponibles: ${Object.keys(tabla).join(', ')}.`
+        `Unidades disponibles: ${Object.keys(tabla).join(', ')}.`,
     );
   }
 }

@@ -16,7 +16,7 @@ describe('Método de Jacobi', () => {
     const A = [
       [4, 1, 1],
       [1, 5, 1],
-      [1, 1, 4]
+      [1, 1, 4],
     ];
 
     const b = [9, 14, 15];
@@ -33,7 +33,7 @@ describe('Método de Jacobi', () => {
     const A = [
       [4, 1, 1],
       [1, 5, 1],
-      [1, 1, 4]
+      [1, 1, 4],
     ];
 
     const b = [9, 14, 15];
@@ -41,15 +41,14 @@ describe('Método de Jacobi', () => {
     const resJacobi = jacobi({ A, b });
     const resGaussSeidel = gaussSeidel({ A, b });
 
-    expect(resJacobi.iteraciones.length)
-      .toBeGreaterThanOrEqual(resGaussSeidel.iteraciones.length);
+    expect(resJacobi.iteraciones.length).toBeGreaterThanOrEqual(resGaussSeidel.iteraciones.length);
   });
 
   test('Lanza error cuando existe un elemento diagonal igual a cero', () => {
     const A = [
       [0, 1, 1],
       [1, 5, 1],
-      [1, 1, 4]
+      [1, 1, 4],
     ];
 
     const b = [9, 14, 15];

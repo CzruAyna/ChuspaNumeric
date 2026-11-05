@@ -6,17 +6,17 @@
  * @returns {{ converged: boolean, lastDiff: number }} Objeto con estado de convergencia y última diferencia
  */
 export function checkConvergence(xNew, xOld, tol) {
-    // Calcular la diferencia absoluta
-    const lastDiff = Math.abs(xNew - xOld);
-    
-    // Verificar si la diferencia es menor que la tolerancia
-    const converged = lastDiff < tol;
-    
-    // Retornar objeto con los resultados
-    return {
-        converged: converged,
-        lastDiff: lastDiff
-    };
+  // Calcular la diferencia absoluta
+  const lastDiff = Math.abs(xNew - xOld);
+
+  // Verificar si la diferencia es menor que la tolerancia
+  const converged = lastDiff < tol;
+
+  // Retornar objeto con los resultados
+  return {
+    converged: converged,
+    lastDiff: lastDiff,
+  };
 }
 
 /**
@@ -24,57 +24,57 @@ export function checkConvergence(xNew, xOld, tol) {
  * Útil para usar en métodos iterativos como Newton y bisección
  */
 export class ConvergenceHistory {
-    constructor() {
-        this.values = [];
+  constructor() {
+    this.values = [];
+  }
+
+  /**
+   * Agrega un nuevo valor y mantiene solo los últimos 2
+   * @param {number} value - Nuevo valor a agregar
+   */
+  addValue(value) {
+    this.values.push(value);
+    // Limitar historial a 2 valores
+    if (this.values.length > 2) {
+      this.values.shift();
     }
-    
-    /**
-     * Agrega un nuevo valor y mantiene solo los últimos 2
-     * @param {number} value - Nuevo valor a agregar
-     */
-    addValue(value) {
-        this.values.push(value);
-        // Limitar historial a 2 valores
-        if (this.values.length > 2) {
-            this.values.shift();
-        }
+  }
+
+  /**
+   * Verifica convergencia usando los últimos 2 valores
+   * @param {number} tol - Tolerancia para convergencia
+   * @returns {{ converged: boolean, lastDiff: number | null }} Resultado de convergencia
+   */
+  checkLastTwo(tol) {
+    if (this.values.length < 2) {
+      return {
+        converged: false,
+        lastDiff: null,
+      };
     }
-    
-    /**
-     * Verifica convergencia usando los últimos 2 valores
-     * @param {number} tol - Tolerancia para convergencia
-     * @returns {{ converged: boolean, lastDiff: number | null }} Resultado de convergencia
-     */
-    checkLastTwo(tol) {
-        if (this.values.length < 2) {
-            return {
-                converged: false,
-                lastDiff: null
-            };
-        }
-        
-        const xOld = this.values[0];
-        const xNew = this.values[1];
-        const lastDiff = Math.abs(xNew - xOld);
-        
-        return {
-            converged: lastDiff < tol,
-            lastDiff: lastDiff
-        };
-    }
-    
-    /**
-     * Resetea el historial
-     */
-    reset() {
-        this.values = [];
-    }
-    
-    /**
-     * Obtiene el último valor almacenado
-     * @returns {number | undefined}
-     */
-    getLastValue() {
-        return this.values[this.values.length - 1];
-    }
+
+    const xOld = this.values[0];
+    const xNew = this.values[1];
+    const lastDiff = Math.abs(xNew - xOld);
+
+    return {
+      converged: lastDiff < tol,
+      lastDiff: lastDiff,
+    };
+  }
+
+  /**
+   * Resetea el historial
+   */
+  reset() {
+    this.values = [];
+  }
+
+  /**
+   * Obtiene el último valor almacenado
+   * @returns {number | undefined}
+   */
+  getLastValue() {
+    return this.values[this.values.length - 1];
+  }
 }
