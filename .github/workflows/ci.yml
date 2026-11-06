@@ -2,7 +2,14 @@ name: CI JavaScript
 
 on:
   push:
-    branches: ['main', 'dev', 'codex/reparar-ci-chuspanumeric', 'codex/integrar-1314-validacion']
+    branches:
+      [
+        'main',
+        'dev',
+        'codex/reparar-ci-chuspanumeric',
+        'codex/integrar-1314-validacion',
+        'codex/integrar-1301-validacion',
+      ]
   pull_request:
     branches: [main, dev]
 
