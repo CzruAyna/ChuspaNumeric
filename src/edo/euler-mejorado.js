@@ -33,6 +33,8 @@ function eulerMejorado({ f, x0, y0, h, xFinal }) {
   }
   // ── Cálculo ─────────────────────────────────────────────────
   const iteraciones = [];
+  const erroresEstimados = [];
+  let errorEstimadoMaximo = 0;
 
   // Extraemos tanto el resultado del cálculo como el tiempo medido
   const { valor: puntos, tiempo_ms } = medirTiempo(() => {
@@ -45,24 +47,37 @@ function eulerMejorado({ f, x0, y0, h, xFinal }) {
       // x actual corresponde al inicio del paso
       const xActual = x0 + (n - 1) * h;
 
-      const k1 = f(xActual, y);
+      const k1 = evaluarDerivada(f, xActual, y);
       const yEstrella = y + h * k1;
 
       // x Siguiente corresponde al final del paso
       const xSiguiente = x0 + n * h;
-      const k2 = f(xSiguiente, yEstrella);
+      const k2 = evaluarDerivada(f, xSiguiente, yEstrella);
       // Corrección de la variable dependiente
       y = y + (h / 2) * (k1 + k2);
+      const errorEstimado =
+        Number.isFinite(y) && Number.isFinite(yEstrella) ? Math.abs(y - yEstrella) : Infinity;
+      erroresEstimados.push(errorEstimado);
+      errorEstimadoMaximo = Math.max(errorEstimadoMaximo, errorEstimado);
       // Registrar la auditoría interna con la estructura exacta exigida por el issue
-      iteraciones.push({ n, x: xSiguiente, y, k1, k2 });
+      iteraciones.push({
+        n,
+        x: xSiguiente,
+        y,
+        k1,
+        k2,
+        predictor: yEstrella,
+        corrector: y,
+        errorEstimado,
+      });
       listaPuntos.push([xSiguiente, y]);
     }
     return listaPuntos;
   });
-  return crearResultado({
+  const resultado = crearResultado({
     resultado: puntos,
     iteraciones,
-    convergio: true,
+    convergio: Number.isFinite(errorEstimadoMaximo),
     mensaje: `Método de Euler mejorado completado en ${iteraciones.length} pasos.`,
     meta: {
       metodo: 'Euler mejorado (Heun)',
@@ -70,5 +85,15 @@ function eulerMejorado({ f, x0, y0, h, xFinal }) {
       tiempo_ms,
     },
   });
+  return { ...resultado, erroresEstimados, errorEstimadoMaximo };
 }
+
+function evaluarDerivada(f, x, y) {
+  const valor = f(x, y);
+  if (typeof valor !== 'number') {
+    throw new ErrorParametros('La derivada f(x, y) debe devolver un número.');
+  }
+  return valor;
+}
+
 export { eulerMejorado };
