@@ -1,0 +1,6 @@
+tests/automatizados/unit/edo/test_runge_kutta_4.test.js
+tests/automatizados/unit/matricial/test_numero_condicion.test.js
+tests/automatizados/unit/lineales/test_sor.test.js
+tests/automatizados/unit/integracion/test_simpson_compuesto.test.js
+tests/automatizados/unit/no-lineales/test_secante.test.js
+tests/automatizados/unit/utils/test_redondeo.test.js

@@ -1,0 +1,24 @@
+name: Validar seis suites Jest
+on:
+  push:
+    branches: [codex/validar-issues-14nov]
+permissions:
+  contents: read
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+      - run: npm install --no-save --package-lock=false --ignore-scripts @eslint/js@9.39.4 globals@16.5.0
+      - name: Validar solo los archivos de las seis issues
+        shell: bash
+        run: |
+          mapfile -t files < .validation/14nov-files.txt
+          node node_modules/eslint/bin/eslint.js --max-warnings 0 "${files[@]}"
+          node node_modules/prettier/bin/prettier.cjs --check "${files[@]}"
+          node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand --coverage=false --runTestsByPath "${files[@]}" --json --outputFile=result.json
+          node -e 'const r=require("./result.json"); console.log("::notice title=Jest::"+r.numPassedTests+" pruebas aprobadas, "+r.numFailedTests+" fallidas")'
