@@ -28,6 +28,14 @@ jobs:
             git checkout --detach "$ref"
             npm test -- --runInBand --coverage=false --runTestsByPath "$archivo"
           done
+      - name: Confirmar la configuración de lint de la base
+        if: matrix.node == 22
+        run: |
+          git checkout --detach 206cd191940e3ea9a6333eb141ee2b155e798486
+          npm run lint || echo 'Lint global en la base de validación requiere diagnóstico.'
+      - name: Instalar los módulos de la configuración de ESLint en la copia auxiliar
+        if: matrix.node == 22
+        run: npm install --no-save --package-lock=false --ignore-scripts @eslint/js@9.39.4 globals@16.5.0
       - name: Verificar lint y formato en Node 22
         if: matrix.node == 22
         run: |
