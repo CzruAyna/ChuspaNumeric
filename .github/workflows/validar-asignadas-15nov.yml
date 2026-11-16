@@ -1,0 +1,57 @@
+name: Validación de ChuspaNumeric 15 nov
+on:
+  push:
+    branches: [codex/validar-asignadas-15nov]
+permissions:
+  contents: read
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Instalar dependencias como en CI
+        run: npm install
+      - name: Probar cada suite en su propio commit
+        run: |
+          for caso in 012847f169bb7d1332c97b023c6ca2bf1d8b886a:tests/automatizados/unit/romberg.test.js 1197090dd877b14ce3241c073f4dba2f72780893:tests/automatizados/unit/simpson_adaptativo.test.js; do
+            ref="${caso%:*}"
+            archivo="${caso#*:}"
+            git checkout --detach "$ref"
+            npm test -- --runInBand --coverage=false --runTestsByPath "$archivo"
+          done
+      - name: Verificar lint y formato en Node 22
+        if: matrix.node == 22
+        run: |
+          for caso in 012847f169bb7d1332c97b023c6ca2bf1d8b886a:tests/automatizados/unit/romberg.test.js 1197090dd877b14ce3241c073f4dba2f72780893:tests/automatizados/unit/simpson_adaptativo.test.js; do
+            git checkout --detach "${caso%:*}"
+            ./node_modules/.bin/eslint "${caso#*:}"
+            ./node_modules/.bin/prettier --check "${caso#*:}"
+          done
+      - name: Ejecutar la suite completa en dev y con ambas pruebas
+        if: matrix.node == 22
+        run: |
+          git checkout --detach '206cd191940e3ea9a6333eb141ee2b155e798486'
+          npm test -- --runInBand > "$RUNNER_TEMP/base.log" 2>&1 && base=0 || base=$?
+          git checkout --detach "$GITHUB_SHA"
+          npm test -- --runInBand > "$RUNNER_TEMP/commit.log" 2>&1 && cambio=0 || cambio=$?
+          for version in base commit; do
+            grep -E '^Test Suites:|^Tests:|^FAIL ' "$RUNNER_TEMP/$version.log"
+            grep -E '^  ● ' "$RUNNER_TEMP/$version.log" | sort > "$RUNNER_TEMP/$version-fallos.log" || true
+          done
+          test "$base" -eq "$cambio"
+          diff -u "$RUNNER_TEMP/base-fallos.log" "$RUNNER_TEMP/commit-fallos.log"
+      - uses: actions/upload-artifact@v4
+        if: always() && matrix.node == 22
+        with:
+          name: comparacion-numeric
+          path: ${{ runner.temp }}/*.log
+          if-no-files-found: ignore
