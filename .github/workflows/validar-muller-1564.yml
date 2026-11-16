@@ -1,0 +1,51 @@
+name: Validación de Müller 1564
+on:
+  push:
+    branches: [codex/validar-muller-1564]
+permissions:
+  contents: read
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci --ignore-scripts
+      - name: Validar el contrato y los casos de borde
+        run: node --test .validation/validar_muller_1564.mjs
+      - name: Ejecutar Jest para Müller
+        run: npm test -- --runInBand --coverage=false --runTestsByPath tests/automatizados/unit/muller.test.js
+      - name: Comprobar ESLint y Prettier
+        if: matrix.node == 22
+        run: |
+          npm install --no-save --package-lock=false --ignore-scripts @eslint/js@9.39.4 globals@16.5.0
+          ./node_modules/.bin/eslint --max-warnings 0 src/no-lineales/muller.js
+          ./node_modules/.bin/prettier --check src/no-lineales/muller.js
+      - name: Contrastar la suite completa contra dev
+        if: matrix.node == 22
+        shell: bash
+        run: |
+          git checkout --detach '57acde1ba4740a2a9535a00ea8a775858aba4d6b'
+          npm test -- --runInBand > "$RUNNER_TEMP/base.log" 2>&1 && base=0 || base=$?
+          git checkout --detach "$GITHUB_SHA"
+          npm test -- --runInBand > "$RUNNER_TEMP/cambio.log" 2>&1 && cambio=0 || cambio=$?
+          for version in base cambio; do
+            grep -E '^Test Suites:|^Tests:|^FAIL ' "$RUNNER_TEMP/$version.log"
+            grep -E '^  ● ' "$RUNNER_TEMP/$version.log" | sort > "$RUNNER_TEMP/$version-fallos.log" || true
+          done
+          test "$base" -eq "$cambio"
+          diff -u "$RUNNER_TEMP/base-fallos.log" "$RUNNER_TEMP/cambio-fallos.log"
+      - uses: actions/upload-artifact@v4
+        if: always() && matrix.node == 22
+        with:
+          name: comparacion-muller-1564
+          path: ${{ runner.temp }}/*.log
+          if-no-files-found: ignore
