@@ -1,0 +1,53 @@
+name: Validación aislada de las cinco issues Numeric
+on:
+  push:
+    branches: [codex/validar-numeric-18nov]
+permissions:
+  contents: read
+jobs:
+  suites:
+    name: Suites asignadas con Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Preparar comparación y dependencias de validación
+        run: |
+          cp .validation/comparar_numeric_18nov.py "$RUNNER_TEMP/comparar.py"
+          npm install --ignore-scripts --package-lock=false
+          npm install --no-save --ignore-scripts --package-lock=false @eslint/js@9.39.4 globals@16.5.0
+      - name: Probar cada archivo en su propio commit
+        run: |
+          for caso in 6ab068fe695d3bbee6e4a5aa804aae139ab93156:tests/automatizados/unit/richardson.test.js 18a32522b91d63dc79b932635cd50b8a6ffe86d4:tests/automatizados/unit/regresion_no_lineal.test.js 3f407dd69faed83ceec2e5995cb7b6f054e7afaa:tests/automatizados/unit/punto-fijo.test.js a90a4f8de186b776d22a414e82890eaa4fe7e929:tests/automatizados/unit/newton_raphson.test.js dd6474fe768265db98a4cd55bc710e9728447c69:tests/automatizados/unit/falsa-posicion.test.js; do
+            commit="${caso%:*}"
+            archivo="${caso#*:}"
+            git checkout --detach "$commit"
+            npm test -- --runInBand --coverage=false --runTestsByPath "$archivo"
+            node node_modules/eslint/bin/eslint.js --max-warnings=0 "$archivo"
+            node node_modules/prettier/bin/prettier.cjs --check "$archivo"
+          done
+      - name: Comparar los fallos globales con dev, sin declararlo aprobado
+        if: matrix.node == 22
+        run: |
+          git checkout --detach '4e5a82e1d16f2dc1aae91b0cf3cab74538d67a14'
+          npm test -- --runInBand --coverage=false --json --outputFile="$RUNNER_TEMP/base.json" > "$RUNNER_TEMP/base.log" 2>&1 && base=0 || base=$?
+          git checkout --detach "$GITHUB_SHA"
+          npm test -- --runInBand --coverage=false --json --outputFile="$RUNNER_TEMP/cambio.json" > "$RUNNER_TEMP/cambio.log" 2>&1 && cambio=0 || cambio=$?
+          test "$base" -eq "$cambio"
+          python "$RUNNER_TEMP/comparar.py" "$RUNNER_TEMP/base.json" "$RUNNER_TEMP/cambio.json"
+      - uses: actions/upload-artifact@v7
+        if: always() && matrix.node == 22
+        with:
+          name: comparacion-global-numeric18
+          path: |
+            ${{ runner.temp }}/*.log
+            ${{ runner.temp }}/*.json
+          if-no-files-found: ignore
